@@ -11,13 +11,15 @@
 
     <div class="game">
 
-        <!-- 🍕 LINKERKANT -->
+        <!-- 🍕 PIZZA GEDEELTE -->
         <div class="pizza-area" id="pizzaArea">
 
             <h1>🍕 PIZZA SPIN</h1>
 
             <p class="instruction">
-                Beweeg je muis rond de pizza!
+                🖱️ Beweeg rond de pizza
+                <br>
+                📱 Sleep met je vinger
             </p>
 
             <div class="pizza" id="pizza">
@@ -39,13 +41,17 @@
                 <span id="spins">0</span>
             </div>
 
-            <!-- LEVEL -->
+            <!-- ⭐ LEVEL -->
             <div class="level-box">
+
                 ⭐ Level:
                 <span id="level">1</span>
 
                 <div class="xp-bar">
-                    <div class="xp-progress" id="xpProgress"></div>
+                    <div
+                        class="xp-progress"
+                        id="xpProgress">
+                    </div>
                 </div>
 
                 <p>
@@ -54,12 +60,13 @@
                     /
                     <span id="xpNeeded">100</span>
                 </p>
+
             </div>
 
         </div>
 
 
-        <!-- 🛒 RECHTERKANT -->
+        <!-- 🛒 SHOP -->
         <div class="shop">
 
             <h2>🛒 UPGRADES</h2>
@@ -81,11 +88,12 @@
 
             </div>
 
+
+            <!-- UPGRADES -->
             <div id="upgradeList"></div>
 
 
             <!-- 🏆 ACHIEVEMENTS -->
-
             <div class="achievements-section">
 
                 <h2>🏆 ACHIEVEMENTS</h2>
@@ -96,9 +104,12 @@
 
 
             <!-- RESET -->
+            <button
+                class="save-button"
+                id="resetButton">
 
-            <button class="save-button" id="resetButton">
                 🗑️ Reset Game
+
             </button>
 
         </div>
@@ -106,9 +117,10 @@
     </div>
 
 
-    <!-- ACHIEVEMENT MELDING -->
-
-    <div id="achievementPopup" class="achievement-popup">
+    <!-- 🏆 ACHIEVEMENT POPUP -->
+    <div
+        id="achievementPopup"
+        class="achievement-popup">
 
         <div class="popup-title">
             🏆 ACHIEVEMENT!
