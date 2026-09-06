@@ -1,0 +1,577 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+.game {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+/* =========================
+   PIZZA AREA
+========================= */
+
+.pizza-area {
+    width: 65%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #202020;
+
+    border-right: 5px solid #333;
+
+    position: relative;
+}
+
+
+/* TITEL */
+
+.pizza-area h1 {
+    position: absolute;
+    top: 25px;
+
+    font-size: 32px;
+
+    color: #ffd166;
+
+    text-shadow: 4px 4px #000;
+
+    z-index: 10;
+}
+
+
+/* INSTRUCTIE */
+
+.instruction {
+    position: absolute;
+    top: 70px;
+
+    color: #aaa;
+
+    font-size: 16px;
+
+    z-index: 10;
+}
+
+
+/* =========================
+   PIZZA
+========================= */
+
+.pizza {
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    position: relative;
+
+    background: #ffd85c;
+
+    border: 20px solid #b86b20;
+
+    box-shadow:
+        0 0 0 7px #7a4216,
+        10px 12px 0 #000;
+
+    transition: transform 0.05s linear;
+
+    image-rendering: pixelated;
+
+    overflow: hidden;
+}
+
+
+/* KAAS */
+
+.cheese {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    border-radius: 50%;
+
+    background: #ffd85c;
+
+    box-shadow:
+        inset 0 0 0 7px #e9a83b;
+
+    z-index: 1;
+}
+
+
+/* RAND */
+
+.crust {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    border-radius: 50%;
+
+    border: 9px solid #9b5317;
+
+    z-index: 5;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   PEPPERONI
+========================= */
+
+.pepperoni {
+    position: absolute;
+
+    width: 38px;
+    height: 38px;
+
+    background: #c93625;
+
+    border-radius: 50%;
+
+    border: 5px solid #8e2117;
+
+    box-shadow:
+        inset 4px 4px 0 #e34b35,
+        3px 3px 0 #8e2117;
+
+    z-index: 3;
+}
+
+.p1 {
+    left: 55px;
+    top: 45px;
+}
+
+.p2 {
+    left: 125px;
+    top: 35px;
+}
+
+.p3 {
+    left: 195px;
+    top: 70px;
+}
+
+.p4 {
+    left: 105px;
+    top: 110px;
+}
+
+.p5 {
+    left: 175px;
+    top: 135px;
+}
+
+.p6 {
+    left: 45px;
+    top: 170px;
+}
+
+.p7 {
+    left: 115px;
+    top: 180px;
+}
+
+.p8 {
+    left: 185px;
+    top: 175px;
+}
+
+
+/* =========================
+   SPIN COUNTER
+========================= */
+
+.spin-counter {
+    margin-top: 35px;
+
+    font-size: 22px;
+
+    background: #111;
+
+    padding: 12px 25px;
+
+    border: 3px solid #444;
+
+    box-shadow: 5px 5px 0 #000;
+}
+
+
+/* =========================
+   LEVEL
+========================= */
+
+.level-box {
+    margin-top: 20px;
+
+    background: #111;
+
+    border: 3px solid #444;
+
+    padding: 12px 20px;
+
+    width: 280px;
+
+    text-align: center;
+
+    box-shadow: 5px 5px 0 #000;
+
+    font-size: 18px;
+}
+
+.level-box p {
+    margin-top: 7px;
+
+    color: #aaa;
+
+    font-size: 14px;
+}
+
+
+/* XP BAR */
+
+.xp-bar {
+    width: 100%;
+
+    height: 18px;
+
+    background: #333;
+
+    border: 2px solid #555;
+
+    margin-top: 10px;
+
+    overflow: hidden;
+}
+
+.xp-progress {
+    width: 0%;
+
+    height: 100%;
+
+    background: #ffd166;
+
+    transition: width 0.2s;
+}
+
+
+/* =========================
+   SHOP
+========================= */
+
+.shop {
+    width: 35%;
+
+    height: 100vh;
+
+    background: #171717;
+
+    padding: 30px;
+
+    overflow-y: auto;
+}
+
+
+.shop h2 {
+    font-size: 30px;
+
+    color: #ffd166;
+
+    margin-bottom: 20px;
+}
+
+
+/* PEPPERONI */
+
+.pepperoni-count {
+    background: #242424;
+
+    border: 3px solid #444;
+
+    padding: 18px;
+
+    font-size: 24px;
+
+    margin-bottom: 15px;
+
+    box-shadow: 5px 5px 0 #000;
+}
+
+
+/* PRODUCTIE */
+
+.production {
+    background: #1e1e1e;
+
+    border: 3px solid #333;
+
+    padding: 15px;
+
+    margin-bottom: 20px;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    color: #ddd;
+}
+
+
+/* =========================
+   UPGRADES
+========================= */
+
+.upgrade {
+    background: #242424;
+
+    border: 3px solid #444;
+
+    padding: 18px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow: 5px 5px 0 #000;
+}
+
+.upgrade-info {
+    flex: 1;
+}
+
+.upgrade h3 {
+    font-size: 19px;
+
+    margin-bottom: 7px;
+}
+
+.upgrade p {
+    color: #aaa;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+}
+
+.level {
+    color: #ffd166 !important;
+
+    margin-top: 5px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+    background: #ffd166;
+
+    border: none;
+
+    padding: 11px 16px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 4px 4px 0 #8d6e28;
+
+    white-space: nowrap;
+}
+
+button:hover {
+    transform: translate(2px, 2px);
+
+    box-shadow: 2px 2px 0 #8d6e28;
+}
+
+button:disabled {
+    background: #555;
+
+    color: #888;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* RESET */
+
+.save-button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    margin-bottom: 30px;
+
+    background: #444;
+
+    color: white;
+
+    box-shadow: 4px 4px 0 #222;
+}
+
+
+/* =========================
+   ACHIEVEMENTS
+========================= */
+
+.achievements-section {
+    margin-top: 35px;
+}
+
+.achievements-section h2 {
+    font-size: 26px;
+}
+
+
+/* ACHIEVEMENT KAART */
+
+.achievement {
+    background: #242424;
+
+    border: 3px solid #444;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    box-shadow: 4px 4px 0 #000;
+
+    opacity: 0.45;
+}
+
+.achievement.unlocked {
+    opacity: 1;
+
+    border-color: #ffd166;
+}
+
+.achievement-title {
+    font-size: 17px;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+}
+
+.achievement-description {
+    color: #aaa;
+
+    font-size: 13px;
+}
+
+.achievement-status {
+    margin-top: 8px;
+
+    color: #ffd166;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   ACHIEVEMENT POPUP
+========================= */
+
+.achievement-popup {
+    position: fixed;
+
+    top: 25px;
+
+    right: 25px;
+
+    width: 300px;
+
+    background: #242424;
+
+    border: 4px solid #ffd166;
+
+    padding: 18px;
+
+    box-shadow: 7px 7px 0 #000;
+
+    transform: translateX(400px);
+
+    transition: transform 0.4s;
+
+    z-index: 999;
+}
+
+.achievement-popup.show {
+    transform: translateX(0);
+}
+
+.popup-title {
+    color: #ffd166;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.shop::-webkit-scrollbar {
+    width: 10px;
+}
+
+.shop::-webkit-scrollbar-track {
+    background: #111;
+}
+
+.shop::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+.shop::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
