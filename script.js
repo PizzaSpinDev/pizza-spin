@@ -1267,13 +1267,6 @@ if (Math.random() < criticalChance) {
     }, 1500);
 }
 
-game.pepperoni += spinReward;
-
-            // XP
-            addXP(
-                rondjes * 5
-            );
-
 
             totaleDraaiing %= 360;
 
