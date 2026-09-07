@@ -155,37 +155,35 @@ const upgrades = [
         baseCost: 25000000,
         effect: "second",
         amount: 250000
+    },
+
+    {
+        id: "turboSpin",
+        name: "⚡ Turbo Spin",
+        description: "+10 pepperoni per draai",
+        baseCost: 100000,
+        effect: "spin",
+        amount: 10
+    },
+
+    {
+        id: "megaRobot",
+        name: "🤖 Mega Robot",
+        description: "+1.000 pepperoni per seconde",
+        baseCost: 1000000,
+        effect: "second",
+        amount: 1000
+    },
+
+    {
+        id: "pizzaReactor",
+        name: "🌋 Pizza Reactor",
+        description: "+10.000 pepperoni per seconde",
+        baseCost: 10000000,
+        effect: "second",
+        amount: 10000
     }
-{
 
-{
-    id: "turboSpin",
-    name: "⚡ Turbo Spin",
-    description: "+10 pepperoni per draai",
-    baseCost: 100000,
-    effect: "spin",
-    amount: 10
-},
-
-{
-    id: "megaRobot",
-    name: "🤖 Mega Robot",
-    description: "+1.000 pepperoni per seconde",
-    baseCost: 1000000,
-    effect: "second",
-    amount: 1000
-},
-
-{
-    id: "pizzaReactor",
-    name: "🌋 Pizza Reactor",
-    description: "+10.000 pepperoni per seconde",
-    baseCost: 10000000,
-    effect: "second",
-    amount: 10000
-}
-
-];
 ];
 
 
@@ -336,9 +334,9 @@ function saveGame() {
 
     try {
 
-        const saveData = JSON.stringify(game);
+        const saveData =
+            JSON.stringify(game);
 
-        // Eerst een backup maken
         const oldSave =
             localStorage.getItem(SAVE_KEY);
 
@@ -351,7 +349,6 @@ function saveGame() {
 
         }
 
-        // Nieuwe save opslaan
         localStorage.setItem(
             SAVE_KEY,
             saveData
@@ -391,7 +388,6 @@ function loadGame() {
     }
 
 
-    // Als normale save bestaat
     if (savedGame) {
 
         try {
@@ -399,19 +395,17 @@ function loadGame() {
             const parsed =
                 JSON.parse(savedGame);
 
-            // Oude gegevens behouden
             game = {
                 ...createNewGame(),
                 ...parsed
             };
 
-            // Objecten apart veilig samenvoegen
             game.upgrades = {
-                ...parsed.upgrades
+                ...(parsed.upgrades || {})
             };
 
             game.achievements = {
-                ...parsed.achievements
+                ...(parsed.achievements || {})
             };
 
         } catch (error) {
@@ -424,17 +418,13 @@ function loadGame() {
 
         }
 
-    }
-
-    // Geen normale save
-    else {
+    } else {
 
         loadBackup();
 
     }
 
 
-    // Controleer belangrijke waarden
     if (
         typeof game.pepperoni !== "number" ||
         !Number.isFinite(game.pepperoni)
@@ -490,7 +480,6 @@ function loadGame() {
     }
 
 
-    // Nieuwe versie opslaan
     saveGame();
 
 }
@@ -515,16 +504,13 @@ function loadBackup() {
             const parsed =
                 JSON.parse(backup);
 
-
             game = {
                 ...createNewGame(),
                 ...parsed
             };
 
-
             game.upgrades =
                 parsed.upgrades || {};
-
 
             game.achievements =
                 parsed.achievements || {};
@@ -537,7 +523,8 @@ function loadBackup() {
             "Ook de backup kon niet worden geladen."
         );
 
-        game = createNewGame();
+        game =
+            createNewGame();
 
     }
 
@@ -564,7 +551,6 @@ function getUpgradeCost(upgrade) {
     const level =
         getUpgradeLevel(upgrade.id);
 
-
     return Math.floor(
         upgrade.baseCost *
         Math.pow(1.5, level)
@@ -581,7 +567,6 @@ function getPerSpin() {
 
     let amount = 1;
 
-
     upgrades.forEach(upgrade => {
 
         if (upgrade.effect === "spin") {
@@ -593,7 +578,6 @@ function getPerSpin() {
         }
 
     });
-
 
     return amount;
 
@@ -608,7 +592,6 @@ function getPerSecond() {
 
     let amount = 0;
 
-
     upgrades.forEach(upgrade => {
 
         if (upgrade.effect === "second") {
@@ -620,7 +603,6 @@ function getPerSecond() {
         }
 
     });
-
 
     return amount;
 
@@ -687,7 +669,8 @@ function formatNumber(number) {
 
 function getXPNeeded() {
 
-    return 100 + (game.level - 1) * 100;
+    return 100 +
+        (game.level - 1) * 100;
 
 }
 
@@ -696,10 +679,12 @@ function addXP(amount) {
 
     game.xp += amount;
 
+    while (
+        game.xp >= getXPNeeded()
+    ) {
 
-    while (game.xp >= getXPNeeded()) {
-
-        game.xp -= getXPNeeded();
+        game.xp -=
+            getXPNeeded();
 
         game.level++;
 
@@ -721,11 +706,9 @@ function showLevelUp() {
         game.level +
         "!";
 
-
     achievementPopup.classList.add(
         "show"
     );
-
 
     setTimeout(function() {
 
@@ -814,7 +797,6 @@ function checkAchievements() {
                     achievement.id
                 ] = true;
 
-
                 showAchievement(
                     achievement
                 );
@@ -839,11 +821,9 @@ function showAchievement(
         achievement.name +
         " gehaald!";
 
-
     achievementPopup.classList.add(
         "show"
     );
-
 
     setTimeout(function() {
 
@@ -864,7 +844,6 @@ function createAchievements() {
 
     achievementList.innerHTML = "";
 
-
     achievements.forEach(
         achievement => {
 
@@ -873,12 +852,10 @@ function createAchievements() {
                     achievement.id
                 ];
 
-
             const div =
                 document.createElement(
                     "div"
                 );
-
 
             div.className =
                 "achievement " +
@@ -887,7 +864,6 @@ function createAchievements() {
                         ? "unlocked"
                         : ""
                 );
-
 
             div.innerHTML = `
 
@@ -909,7 +885,6 @@ function createAchievements() {
 
             `;
 
-
             achievementList.appendChild(
                 div
             );
@@ -928,26 +903,21 @@ function createShop() {
 
     upgradeList.innerHTML = "";
 
-
     upgrades.forEach(upgrade => {
 
         const level =
             getUpgradeLevel(upgrade.id);
 
-
         const cost =
             getUpgradeCost(upgrade);
-
 
         const div =
             document.createElement(
                 "div"
             );
 
-
         div.className =
             "upgrade";
-
 
         div.innerHTML = `
 
@@ -982,7 +952,6 @@ function createShop() {
             </button>
 
         `;
-
 
         upgradeList.appendChild(
             div
@@ -1024,17 +993,14 @@ function buyUpgrade(id) {
             item => item.id === id
         );
 
-
     if (!upgrade) {
 
         return;
 
     }
 
-
     const cost =
         getUpgradeCost(upgrade);
-
 
     if (
         game.pepperoni >= cost
@@ -1042,13 +1008,10 @@ function buyUpgrade(id) {
 
         game.pepperoni -= cost;
 
-
         game.upgrades[id] =
             getUpgradeLevel(id) + 1;
 
-
         addXP(10);
-
 
         saveGame();
 
@@ -1070,36 +1033,29 @@ function updateGame() {
             game.pepperoni
         );
 
-
     spinsText.textContent =
         formatNumber(
             game.spins
         );
-
 
     perSpinText.textContent =
         formatNumber(
             getPerSpin()
         );
 
-
     perSecondText.textContent =
         formatNumber(
             getPerSecond()
         );
 
-
     levelText.textContent =
         game.level;
-
 
     xpText.textContent =
         Math.floor(game.xp);
 
-
     xpNeededText.textContent =
         getXPNeeded();
-
 
     const percentage =
         (
@@ -1107,10 +1063,8 @@ function updateGame() {
             getXPNeeded()
         ) * 100;
 
-
     xpProgress.style.width =
         percentage + "%";
-
 
     createShop();
 
@@ -1141,24 +1095,21 @@ function getAngle(event) {
     const rect =
         pizza.getBoundingClientRect();
 
-
     const middenX =
         rect.left +
         rect.width / 2;
-
 
     const middenY =
         rect.top +
         rect.height / 2;
 
-
     const x =
-        event.clientX - middenX;
-
+        event.clientX -
+        middenX;
 
     const y =
-        event.clientY - middenY;
-
+        event.clientY -
+        middenY;
 
     return (
         Math.atan2(y, x) *
@@ -1177,37 +1128,23 @@ pizzaArea.addEventListener(
     "pointermove",
     function(event) {
 
-        // Alleen als er echt met de muis
-        // of vinger wordt bewogen
-
-        if (
-            event.pointerType === "mouse" &&
-            event.buttons === 0
-        ) {
-
-            return;
-
-        }
-
-
         const hoek =
             getAngle(event);
-
 
         if (
             vorigeHoek === null
         ) {
 
-            vorigeHoek = hoek;
+            vorigeHoek =
+                hoek;
 
             return;
 
         }
 
-
         let verschil =
-            hoek - vorigeHoek;
-
+            hoek -
+            vorigeHoek;
 
         if (verschil > 180) {
 
@@ -1215,16 +1152,14 @@ pizzaArea.addEventListener(
 
         }
 
-
         if (verschil < -180) {
 
             verschil += 360;
 
         }
 
-
-        totaleDraaiing += verschil;
-
+        totaleDraaiing +=
+            verschil;
 
         pizza.style.transform =
             `rotate(${totaleDraaiing}deg)`;
@@ -1247,36 +1182,65 @@ pizzaArea.addEventListener(
                 rondjes;
 
 
-let spinReward =
-    rondjes * getPerSpin();
+            // ========================================
+            // 💥 CRITICAL SPIN
+            // ========================================
 
-const criticalChance = 0.10;
+            let spinReward =
+                rondjes *
+                getPerSpin();
 
-if (Math.random() < criticalChance) {
-    spinReward *= 2;
+            const criticalChance =
+                0.10;
 
-    popupText.textContent =
-        "💥 CRITICAL SPIN! +" +
-        formatNumber(spinReward) +
-        " pepperoni!";
+            if (
+                Math.random() <
+                criticalChance
+            ) {
 
-    achievementPopup.classList.add("show");
+                spinReward *= 2;
 
-    setTimeout(function() {
-        achievementPopup.classList.remove("show");
-    }, 1500);
-}
+                popupText.textContent =
+                    "💥 CRITICAL SPIN! +" +
+                    formatNumber(
+                        spinReward
+                    ) +
+                    " pepperoni!";
+
+                achievementPopup.classList.add(
+                    "show"
+                );
+
+                setTimeout(function() {
+
+                    achievementPopup.classList.remove(
+                        "show"
+                    );
+
+                }, 1500);
+
+            }
+
+
+            game.pepperoni +=
+                spinReward;
+
+
+            // XP
+            addXP(
+                rondjes * 5
+            );
 
 
             totaleDraaiing %= 360;
-
 
             updateGame();
 
         }
 
 
-        vorigeHoek = hoek;
+        vorigeHoek =
+            hoek;
 
     }
 );
@@ -1305,7 +1269,8 @@ pizzaArea.addEventListener(
     "pointerup",
     function() {
 
-        vorigeHoek = null;
+        vorigeHoek =
+            null;
 
     }
 );
@@ -1315,7 +1280,8 @@ pizzaArea.addEventListener(
     "pointercancel",
     function() {
 
-        vorigeHoek = null;
+        vorigeHoek =
+            null;
 
     }
 );
@@ -1331,12 +1297,10 @@ setInterval(
         const amount =
             getPerSecond();
 
-
         if (amount > 0) {
 
             game.pepperoni +=
                 amount;
-
 
             addXP(
                 Math.max(
@@ -1346,7 +1310,6 @@ setInterval(
                     )
                 )
             );
-
 
             updateGame();
 
@@ -1370,7 +1333,6 @@ resetButton.addEventListener(
                 "Weet je zeker dat je ALLES wilt verwijderen?"
             );
 
-
         if (!confirmReset) {
 
             return;
@@ -1378,7 +1340,6 @@ resetButton.addEventListener(
         }
 
 
-        // Zowel save als backup verwijderen
         localStorage.removeItem(
             SAVE_KEY
         );
@@ -1392,9 +1353,11 @@ resetButton.addEventListener(
             createNewGame();
 
 
-        totaleDraaiing = 0;
+        totaleDraaiing =
+            0;
 
-        vorigeHoek = null;
+        vorigeHoek =
+            null;
 
 
         pizza.style.transform =
