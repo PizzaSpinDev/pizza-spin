@@ -156,7 +156,36 @@ const upgrades = [
         effect: "second",
         amount: 250000
     }
+{
 
+{
+    id: "turboSpin",
+    name: "⚡ Turbo Spin",
+    description: "+10 pepperoni per draai",
+    baseCost: 100000,
+    effect: "spin",
+    amount: 10
+},
+
+{
+    id: "megaRobot",
+    name: "🤖 Mega Robot",
+    description: "+1.000 pepperoni per seconde",
+    baseCost: 1000000,
+    effect: "second",
+    amount: 1000
+},
+
+{
+    id: "pizzaReactor",
+    name: "🌋 Pizza Reactor",
+    description: "+10.000 pepperoni per seconde",
+    baseCost: 10000000,
+    effect: "second",
+    amount: 10000
+}
+
+];
 ];
 
 
