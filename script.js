@@ -1247,10 +1247,27 @@ pizzaArea.addEventListener(
                 rondjes;
 
 
-            game.pepperoni +=
-                rondjes *
-                getPerSpin();
+let spinReward =
+    rondjes * getPerSpin();
 
+const criticalChance = 0.10;
+
+if (Math.random() < criticalChance) {
+    spinReward *= 2;
+
+    popupText.textContent =
+        "💥 CRITICAL SPIN! +" +
+        formatNumber(spinReward) +
+        " pepperoni!";
+
+    achievementPopup.classList.add("show");
+
+    setTimeout(function() {
+        achievementPopup.classList.remove("show");
+    }, 1500);
+}
+
+game.pepperoni += spinReward;
 
             // XP
             addXP(
