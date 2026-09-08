@@ -61,11 +61,12 @@ body {
 ========================================================= */
 
 .pizza-area h1 {
-    position: absolute;
+    position: static;
 
-    top: 25px;
+    font-size: 27px;
 
-    font-size: 36px;
+    margin-bottom: 5px;
+}
 
     color: #ffd166;
 
@@ -75,6 +76,8 @@ body {
     z-index: 10;
 
     white-space: nowrap;
+
+    margin-bottom: 8px;
 }
 
 
@@ -83,9 +86,7 @@ body {
 ========================================================= */
 
 .instruction {
-    position: absolute;
-
-    top: 82px;
+    position: static;
 
     width: 100%;
 
@@ -95,13 +96,14 @@ body {
 
     font-size: 17px;
 
-    line-height: 1.7;
+    line-height: 1.5;
 
     text-align: center;
 
     z-index: 10;
-}
 
+    margin-bottom: 20px;
+}
 
 .instruction div {
     margin-bottom: 2px;
@@ -150,7 +152,7 @@ body {
        Ruimte onder de instructies.
        Hierdoor kan de tekst nooit over de pizza vallen.
     */
-    margin-top: 145px;
+  margin-top: 0;
 
     cursor: pointer;
 }
@@ -777,7 +779,6 @@ button:disabled {
     /* INSTRUCTIES */
 
     .instruction {
-        top: 57px;
 
         padding: 0 10px;
 
@@ -795,7 +796,7 @@ button:disabled {
 
         border-width: 16px;
 
-        margin-top: 115px;
+       margin-top: 0;
     }
 
 
