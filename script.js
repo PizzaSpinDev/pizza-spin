@@ -1,1377 +1,1120 @@
-// ========================================
-// 🍕 PIZZA SPIN V1.1
-// MOBILE + SAFE SAVE SYSTEM
-// ========================================
+document.addEventListener("DOMContentLoaded", function () {
+
+    // =========================================================
+    // PIZZA SPIN V3
+    // STAP 1 - CLICKER BASIS
+    // =========================================================
+
+    const SAVE_KEY = "pizzaSpinSave";
+    const SAVE_BACKUP_KEY = "pizzaSpinSaveBackup";
+    const SAVE_VERSION = 3;
 
 
-// ========================================
-// SAVE INSTELLINGEN
-// ========================================
+    // =========================================================
+    // DOM ELEMENTEN
+    // =========================================================
 
-const SAVE_KEY = "pizzaSpinSave";
+    const pizza = document.getElementById("pizza");
 
-const SAVE_BACKUP_KEY = "pizzaSpinSaveBackup";
+    const pepperoniElement =
+        document.getElementById("pepperoni");
 
-const SAVE_VERSION = 2;
+    const spinsElement =
+        document.getElementById("spins");
+
+    const perSpinElement =
+        document.getElementById("perSpin");
+
+    const perSecondElement =
+        document.getElementById("perSecond");
+
+    const upgradeList =
+        document.getElementById("upgradeList");
+
+    const resetButton =
+        document.getElementById("resetButton");
+
+    const levelElement =
+        document.getElementById("level");
+
+    const xpElement =
+        document.getElementById("xp");
+
+    const xpNeededElement =
+        document.getElementById("xpNeeded");
+
+    const xpProgress =
+        document.getElementById("xpProgress");
+
+    const achievementList =
+        document.getElementById("achievementList");
+
+    const achievementPopup =
+        document.getElementById("achievementPopup");
+
+    const popupText =
+        document.getElementById("popupText");
 
 
-// ========================================
-// STANDAARD GAME
-// ========================================
+    // =========================================================
+    // CONTROLEREN OF HTML ELEMENTEN BESTAAN
+    // =========================================================
 
-function createNewGame() {
+    if (!pizza) {
+        console.error("Pizza element #pizza bestaat niet.");
+        return;
+    }
 
-    return {
-        saveVersion: SAVE_VERSION,
 
-        pepperoni: 0,
+    // =========================================================
+    // NIEUW SPEL
+    // =========================================================
 
-        spins: 0,
+    function createNewGame() {
 
-        xp: 0,
+        return {
+            saveVersion: SAVE_VERSION,
 
-        level: 1,
+            pepperoni: 0,
 
-        upgrades: {},
+            // "spins" houden we voorlopig als interne teller.
+            // Voor V3 betekent dit eigenlijk aantal clicks.
+            spins: 0,
 
-        achievements: {}
+            xp: 0,
+            level: 1,
+
+            upgrades: {
+                pepperoniPower: 0,
+                bigPizza: 0,
+                fastSpin: 0,
+
+                autoPizza: 0,
+                pizzaRobot: 0,
+                pizzaChef: 0,
+                pizzaFactory: 0,
+                pizzaShop: 0,
+                pizzaEmpire: 0,
+                pizzaRocket: 0,
+                spacePizza: 0,
+                pizzaGod: 0
+            },
+
+            achievements: {}
+        };
+    }
+
+
+    let game = createNewGame();
+
+
+    // =========================================================
+    // UPGRADES
+    // =========================================================
+
+    const upgrades = {
+
+        pepperoniPower: {
+            name: "Pepperoni Power",
+            description: "+1 pepperoni per click",
+            baseCost: 10,
+            type: "click",
+            value: 1
+        },
+
+        bigPizza: {
+            name: "Big Pizza",
+            description: "+2 pepperoni per click",
+            baseCost: 50,
+            type: "click",
+            value: 2
+        },
+
+        fastSpin: {
+            name: "Turbo Click",
+            description: "+5 pepperoni per click",
+            baseCost: 150,
+            type: "click",
+            value: 5
+        },
+
+        autoPizza: {
+            name: "Auto Pizza",
+            description: "+1 pepperoni per seconde",
+            baseCost: 100,
+            type: "second",
+            value: 1
+        },
+
+        pizzaRobot: {
+            name: "Pizza Robot",
+            description: "+5 pepperoni per seconde",
+            baseCost: 500,
+            type: "second",
+            value: 5
+        },
+
+        pizzaChef: {
+            name: "Pizza Chef",
+            description: "+20 pepperoni per seconde",
+            baseCost: 2000,
+            type: "second",
+            value: 20
+        },
+
+        pizzaFactory: {
+            name: "Pizza Factory",
+            description: "+100 pepperoni per seconde",
+            baseCost: 10000,
+            type: "second",
+            value: 100
+        },
+
+        pizzaShop: {
+            name: "Pizza Shop",
+            description: "+500 pepperoni per seconde",
+            baseCost: 50000,
+            type: "second",
+            value: 500
+        },
+
+        pizzaEmpire: {
+            name: "Pizza Empire",
+            description: "+2.500 pepperoni per seconde",
+            baseCost: 250000,
+            type: "second",
+            value: 2500
+        },
+
+        pizzaRocket: {
+            name: "Pizza Rocket",
+            description: "+10.000 pepperoni per seconde",
+            baseCost: 1000000,
+            type: "second",
+            value: 10000
+        },
+
+        spacePizza: {
+            name: "Space Pizza",
+            description: "+50.000 pepperoni per seconde",
+            baseCost: 5000000,
+            type: "second",
+            value: 50000
+        },
+
+        pizzaGod: {
+            name: "Pizza God",
+            description: "+250.000 pepperoni per seconde",
+            baseCost: 25000000,
+            type: "second",
+            value: 250000
+        }
     };
 
-}
+
+    // =========================================================
+    // ACHIEVEMENTS
+    // =========================================================
+
+    const achievements = {
+
+        firstSpin: {
+            name: "First Bite",
+            description: "Klik 1 keer op de pizza.",
+            requirement: function () {
+                return game.spins >= 1;
+            }
+        },
+
+        hundredSpins: {
+            name: "Pizza Lover",
+            description: "Klik 100 keer op de pizza.",
+            requirement: function () {
+                return game.spins >= 100;
+            }
+        },
+
+        thousandSpins: {
+            name: "Pizza Addict",
+            description: "Klik 1.000 keer op de pizza.",
+            requirement: function () {
+                return game.spins >= 1000;
+            }
+        },
+
+        tenThousandSpins: {
+            name: "Pizza Master",
+            description: "Klik 10.000 keer op de pizza.",
+            requirement: function () {
+                return game.spins >= 10000;
+            }
+        },
+
+        millionPepperoni: {
+            name: "Pepperoni Millionaire",
+            description: "Verdien 1 miljoen pepperoni.",
+            requirement: function () {
+                return game.pepperoni >= 1000000;
+            }
+        },
+
+        tenMillionPepperoni: {
+            name: "Pepperoni Tycoon",
+            description: "Verdien 10 miljoen pepperoni.",
+            requirement: function () {
+                return game.pepperoni >= 10000000;
+            }
+        },
+
+        tenPerSecond: {
+            name: "Pizza Machine",
+            description: "Bereik 10 pepperoni per seconde.",
+            requirement: function () {
+                return getPerSecond() >= 10;
+            }
+        },
+
+        hundredPerSecond: {
+            name: "Pizza Factory",
+            description: "Bereik 100 pepperoni per seconde.",
+            requirement: function () {
+                return getPerSecond() >= 100;
+            }
+        },
+
+        thousandPerSecond: {
+            name: "Pizza Empire",
+            description: "Bereik 1.000 pepperoni per seconde.",
+            requirement: function () {
+                return getPerSecond() >= 1000;
+            }
+        },
+
+        levelTen: {
+            name: "Level 10",
+            description: "Bereik level 10.",
+            requirement: function () {
+                return game.level >= 10;
+            }
+        }
+    };
 
 
-let game = createNewGame();
+    // =========================================================
+    // GETAL FORMATTEREN
+    // =========================================================
 
+    function formatNumber(number) {
 
-// ========================================
-// UPGRADES
-// ========================================
-
-const upgrades = [
-
-    {
-        id: "pepperoniPower",
-        name: "⚡ Pepperoni Power",
-        description: "+1 pepperoni per draai",
-        baseCost: 10,
-        effect: "spin",
-        amount: 1
-    },
-
-    {
-        id: "bigPizza",
-        name: "🍕 Grotere Pizza",
-        description: "+2 pepperoni per draai",
-        baseCost: 50,
-        effect: "spin",
-        amount: 2
-    },
-
-    {
-        id: "fastSpin",
-        name: "💨 Snelle Draai",
-        description: "+5 pepperoni per draai",
-        baseCost: 150,
-        effect: "spin",
-        amount: 5
-    },
-
-    {
-        id: "autoPizza",
-        name: "🤖 Auto Pizza",
-        description: "+1 pepperoni per seconde",
-        baseCost: 100,
-        effect: "second",
-        amount: 1
-    },
-
-    {
-        id: "pizzaRobot",
-        name: "🦾 Pizza Robot",
-        description: "+5 pepperoni per seconde",
-        baseCost: 500,
-        effect: "second",
-        amount: 5
-    },
-
-    {
-        id: "pizzaChef",
-        name: "👨‍🍳 Pizza Chef",
-        description: "+20 pepperoni per seconde",
-        baseCost: 2000,
-        effect: "second",
-        amount: 20
-    },
-
-    {
-        id: "pizzaFactory",
-        name: "🏭 Pizza Fabriek",
-        description: "+100 pepperoni per seconde",
-        baseCost: 10000,
-        effect: "second",
-        amount: 100
-    },
-
-    {
-        id: "pizzaShop",
-        name: "🏪 Pizzeria",
-        description: "+500 pepperoni per seconde",
-        baseCost: 50000,
-        effect: "second",
-        amount: 500
-    },
-
-    {
-        id: "pizzaEmpire",
-        name: "🌎 Pizza Imperium",
-        description: "+2.500 pepperoni per seconde",
-        baseCost: 250000,
-        effect: "second",
-        amount: 2500
-    },
-
-    {
-        id: "pizzaRocket",
-        name: "🚀 Pizza Raket",
-        description: "+10.000 pepperoni per seconde",
-        baseCost: 1000000,
-        effect: "second",
-        amount: 10000
-    },
-
-    {
-        id: "spacePizza",
-        name: "🌌 Ruimte Pizza",
-        description: "+50.000 pepperoni per seconde",
-        baseCost: 5000000,
-        effect: "second",
-        amount: 50000
-    },
-
-    {
-        id: "pizzaGod",
-        name: "👑 Pizza God",
-        description: "+250.000 pepperoni per seconde",
-        baseCost: 25000000,
-        effect: "second",
-        amount: 250000
-    }
-
-];
-
-
-// ========================================
-// ACHIEVEMENTS
-// ========================================
-
-const achievements = [
-
-    {
-        id: "firstSpin",
-        name: "🥉 Eerste Pizza",
-        description: "Maak je eerste draai.",
-        requirement: "spins",
-        target: 1
-    },
-
-    {
-        id: "hundredSpins",
-        name: "🥈 Pizza Fan",
-        description: "Maak 100 draaien.",
-        requirement: "spins",
-        target: 100
-    },
-
-    {
-        id: "thousandSpins",
-        name: "🥇 Pizza Master",
-        description: "Maak 1.000 draaien.",
-        requirement: "spins",
-        target: 1000
-    },
-
-    {
-        id: "tenThousandSpins",
-        name: "🔥 Pizza Legende",
-        description: "Maak 10.000 draaien.",
-        requirement: "spins",
-        target: 10000
-    },
-
-    {
-        id: "millionPepperoni",
-        name: "💰 Pepperoni Miljonair",
-        description: "Verdien 1.000.000 pepperoni.",
-        requirement: "pepperoni",
-        target: 1000000
-    },
-
-    {
-        id: "tenMillionPepperoni",
-        name: "💎 Pepperoni Rijk",
-        description: "Verdien 10.000.000 pepperoni.",
-        requirement: "pepperoni",
-        target: 10000000
-    },
-
-    {
-        id: "tenPerSecond",
-        name: "🤖 Robot Starter",
-        description: "Bereik 10 pepperoni per seconde.",
-        requirement: "perSecond",
-        target: 10
-    },
-
-    {
-        id: "hundredPerSecond",
-        name: "🏭 Pizza Fabriek",
-        description: "Bereik 100 pepperoni per seconde.",
-        requirement: "perSecond",
-        target: 100
-    },
-
-    {
-        id: "thousandPerSecond",
-        name: "🌎 Pizza Tycoon",
-        description: "Bereik 1.000 pepperoni per seconde.",
-        requirement: "perSecond",
-        target: 1000
-    },
-
-    {
-        id: "levelTen",
-        name: "⭐ Level 10",
-        description: "Bereik level 10.",
-        requirement: "level",
-        target: 10
-    }
-
-];
-
-
-// ========================================
-// HTML ELEMENTEN
-// ========================================
-
-const pizzaArea =
-    document.getElementById("pizzaArea");
-
-const pizza =
-    document.getElementById("pizza");
-
-const pepperoniText =
-    document.getElementById("pepperoni");
-
-const spinsText =
-    document.getElementById("spins");
-
-const perSpinText =
-    document.getElementById("perSpin");
-
-const perSecondText =
-    document.getElementById("perSecond");
-
-const upgradeList =
-    document.getElementById("upgradeList");
-
-const resetButton =
-    document.getElementById("resetButton");
-
-const levelText =
-    document.getElementById("level");
-
-const xpText =
-    document.getElementById("xp");
-
-const xpNeededText =
-    document.getElementById("xpNeeded");
-
-const xpProgress =
-    document.getElementById("xpProgress");
-
-const achievementList =
-    document.getElementById("achievementList");
-
-const achievementPopup =
-    document.getElementById("achievementPopup");
-
-const popupText =
-    document.getElementById("popupText");
-
-
-// ========================================
-// 💾 VEILIG OPSLAAN
-// ========================================
-
-function saveGame() {
-
-    try {
-
-        const saveData = JSON.stringify(game);
-
-        // Eerst een backup maken
-        const oldSave =
-            localStorage.getItem(SAVE_KEY);
-
-        if (oldSave) {
-
-            localStorage.setItem(
-                SAVE_BACKUP_KEY,
-                oldSave
-            );
-
+        if (number < 1000) {
+            return Math.floor(number).toString();
         }
 
-        // Nieuwe save opslaan
-        localStorage.setItem(
-            SAVE_KEY,
-            saveData
-        );
-
-    } catch (error) {
-
-        console.log(
-            "Save kon niet worden opgeslagen:",
-            error
-        );
-
-    }
-
-}
-
-
-// ========================================
-// 💾 GAME LADEN
-// ========================================
-
-function loadGame() {
-
-    let savedGame = null;
-
-    try {
-
-        savedGame =
-            localStorage.getItem(SAVE_KEY);
-
-    } catch (error) {
-
-        console.log(
-            "Save kon niet worden gelezen."
-        );
-
-    }
-
-
-    // Als normale save bestaat
-    if (savedGame) {
-
-        try {
-
-            const parsed =
-                JSON.parse(savedGame);
-
-            // Oude gegevens behouden
-            game = {
-                ...createNewGame(),
-                ...parsed
-            };
-
-            // Objecten apart veilig samenvoegen
-            game.upgrades = {
-                ...parsed.upgrades
-            };
-
-            game.achievements = {
-                ...parsed.achievements
-            };
-
-        } catch (error) {
-
-            console.log(
-                "Normale save is beschadigd. Backup wordt geprobeerd."
-            );
-
-            loadBackup();
-
+        if (number < 1000000) {
+            return (number / 1000).toFixed(1) + "K";
         }
 
-    }
-
-    // Geen normale save
-    else {
-
-        loadBackup();
-
-    }
-
-
-    // Controleer belangrijke waarden
-    if (
-        typeof game.pepperoni !== "number" ||
-        !Number.isFinite(game.pepperoni)
-    ) {
-
-        game.pepperoni = 0;
-
-    }
-
-
-    if (
-        typeof game.spins !== "number" ||
-        !Number.isFinite(game.spins)
-    ) {
-
-        game.spins = 0;
-
-    }
-
-
-    if (
-        typeof game.xp !== "number" ||
-        !Number.isFinite(game.xp)
-    ) {
-
-        game.xp = 0;
-
-    }
-
-
-    if (
-        typeof game.level !== "number" ||
-        !Number.isFinite(game.level) ||
-        game.level < 1
-    ) {
-
-        game.level = 1;
-
-    }
-
-
-    if (!game.upgrades) {
-
-        game.upgrades = {};
-
-    }
-
-
-    if (!game.achievements) {
-
-        game.achievements = {};
-
-    }
-
-
-    // Nieuwe versie opslaan
-    saveGame();
-
-}
-
-
-// ========================================
-// 💾 BACKUP LADEN
-// ========================================
-
-function loadBackup() {
-
-    try {
-
-        const backup =
-            localStorage.getItem(
-                SAVE_BACKUP_KEY
-            );
-
-
-        if (backup) {
-
-            const parsed =
-                JSON.parse(backup);
-
-
-            game = {
-                ...createNewGame(),
-                ...parsed
-            };
-
-
-            game.upgrades =
-                parsed.upgrades || {};
-
-
-            game.achievements =
-                parsed.achievements || {};
-
+        if (number < 1000000000) {
+            return (number / 1000000).toFixed(1) + "M";
         }
 
-    } catch (error) {
-
-        console.log(
-            "Ook de backup kon niet worden geladen."
-        );
-
-        game = createNewGame();
-
-    }
-
-}
-
-
-// ========================================
-// UPGRADE LEVEL
-// ========================================
-
-function getUpgradeLevel(id) {
-
-    return game.upgrades[id] || 0;
-
-}
-
-
-// ========================================
-// UPGRADE KOSTEN
-// ========================================
-
-function getUpgradeCost(upgrade) {
-
-    const level =
-        getUpgradeLevel(upgrade.id);
-
-
-    return Math.floor(
-        upgrade.baseCost *
-        Math.pow(1.5, level)
-    );
-
-}
-
-
-// ========================================
-// PEPPERONI PER DRAAI
-// ========================================
-
-function getPerSpin() {
-
-    let amount = 1;
-
-
-    upgrades.forEach(upgrade => {
-
-        if (upgrade.effect === "spin") {
-
-            amount +=
-                getUpgradeLevel(upgrade.id) *
-                upgrade.amount;
-
+        if (number < 1000000000000) {
+            return (number / 1000000000).toFixed(1) + "B";
         }
 
-    });
+        return (number / 1000000000000).toFixed(1) + "T";
+    }
 
 
-    return amount;
+    // =========================================================
+    // CLICK POWER
+    // =========================================================
 
-}
+    function getPerClick() {
+
+        let amount = 1;
+
+        amount +=
+            game.upgrades.pepperoniPower *
+            upgrades.pepperoniPower.value;
+
+        amount +=
+            game.upgrades.bigPizza *
+            upgrades.bigPizza.value;
+
+        amount +=
+            game.upgrades.fastSpin *
+            upgrades.fastSpin.value;
+
+        return amount;
+    }
 
 
-// ========================================
-// PEPPERONI PER SECONDE
-// ========================================
+    // =========================================================
+    // AUTO PRODUCTIE
+    // =========================================================
 
-function getPerSecond() {
+    function getPerSecond() {
 
-    let amount = 0;
+        let amount = 0;
+
+        amount +=
+            game.upgrades.autoPizza *
+            upgrades.autoPizza.value;
+
+        amount +=
+            game.upgrades.pizzaRobot *
+            upgrades.pizzaRobot.value;
+
+        amount +=
+            game.upgrades.pizzaChef *
+            upgrades.pizzaChef.value;
+
+        amount +=
+            game.upgrades.pizzaFactory *
+            upgrades.pizzaFactory.value;
+
+        amount +=
+            game.upgrades.pizzaShop *
+            upgrades.pizzaShop.value;
+
+        amount +=
+            game.upgrades.pizzaEmpire *
+            upgrades.pizzaEmpire.value;
+
+        amount +=
+            game.upgrades.pizzaRocket *
+            upgrades.pizzaRocket.value;
+
+        amount +=
+            game.upgrades.spacePizza *
+            upgrades.spacePizza.value;
+
+        amount +=
+            game.upgrades.pizzaGod *
+            upgrades.pizzaGod.value;
+
+        return amount;
+    }
 
 
-    upgrades.forEach(upgrade => {
+    // =========================================================
+    // UPGRADE KOSTEN
+    // =========================================================
 
-        if (upgrade.effect === "second") {
+    function getUpgradeCost(upgradeId) {
 
-            amount +=
-                getUpgradeLevel(upgrade.id) *
-                upgrade.amount;
+        const upgrade = upgrades[upgradeId];
 
+        if (!upgrade) {
+            return Infinity;
         }
 
-    });
+        const owned =
+            game.upgrades[upgradeId] || 0;
 
-
-    return amount;
-
-}
-
-
-// ========================================
-// NUMMERS MOOI WEERGEVEN
-// ========================================
-
-function formatNumber(number) {
-
-    if (number < 1000) {
-
-        return Math.floor(number);
-
-    }
-
-
-    if (number < 1000000) {
-
-        return (
-            (number / 1000)
-                .toFixed(1)
-                .replace(".0", "")
-            + "K"
+        return Math.floor(
+            upgrade.baseCost *
+            Math.pow(1.15, owned)
         );
-
     }
 
 
-    if (number < 1000000000) {
+    // =========================================================
+    // XP
+    // =========================================================
 
-        return (
-            (number / 1000000)
-                .toFixed(1)
-                .replace(".0", "")
-            + "M"
+    function getXPNeeded() {
+
+        return Math.floor(
+            100 *
+            Math.pow(1.35, game.level - 1)
         );
-
     }
 
 
-    if (number < 1000000000000) {
+    function addXP(amount) {
 
-        return (
-            (number / 1000000000)
-                .toFixed(1)
-                .replace(".0", "")
-            + "B"
-        );
+        if (amount <= 0) {
+            return;
+        }
 
+        game.xp += amount;
+
+        let leveledUp = false;
+
+        while (
+            game.xp >= getXPNeeded()
+        ) {
+
+            game.xp -= getXPNeeded();
+
+            game.level++;
+
+            leveledUp = true;
+        }
+
+        if (leveledUp) {
+            showLevelUp();
+        }
+
+        checkAchievements();
     }
 
 
-    return number.toExponential(2);
+    // =========================================================
+    // LEVEL UP
+    // =========================================================
 
-}
+    function showLevelUp() {
 
+        if (
+            !achievementPopup ||
+            !popupText
+        ) {
+            return;
+        }
 
-// ========================================
-// XP
-// ========================================
+        popupText.textContent =
+            "🎉 LEVEL UP! Level " +
+            game.level;
 
-function getXPNeeded() {
+        achievementPopup.classList.add("show");
 
-    return 100 + (game.level - 1) * 100;
+        setTimeout(function () {
 
-}
+            achievementPopup.classList.remove("show");
 
-
-function addXP(amount) {
-
-    game.xp += amount;
-
-
-    while (game.xp >= getXPNeeded()) {
-
-        game.xp -= getXPNeeded();
-
-        game.level++;
-
-        showLevelUp();
-
+        }, 1500);
     }
 
-}
 
+    // =========================================================
+    // ACHIEVEMENTS CONTROLEREN
+    // =========================================================
 
-// ========================================
-// LEVEL UP
-// ========================================
+    function checkAchievements() {
 
-function showLevelUp() {
+        for (
+            const achievementId in achievements
+        ) {
 
-    popupText.textContent =
-        "⭐ Je bent nu level " +
-        game.level +
-        "!";
-
-
-    achievementPopup.classList.add(
-        "show"
-    );
-
-
-    setTimeout(function() {
-
-        achievementPopup.classList.remove(
-            "show"
-        );
-
-    }, 2500);
-
-}
-
-
-// ========================================
-// ACHIEVEMENTS CONTROLEREN
-// ========================================
-
-function checkAchievements() {
-
-    achievements.forEach(
-        achievement => {
+            const achievement =
+                achievements[achievementId];
 
             if (
-                game.achievements[
-                    achievement.id
-                ]
+                !game.achievements[achievementId] &&
+                achievement.requirement()
             ) {
 
-                return;
-
-            }
-
-
-            let currentValue = 0;
-
-
-            if (
-                achievement.requirement ===
-                "spins"
-            ) {
-
-                currentValue =
-                    game.spins;
-
-            }
-
-
-            if (
-                achievement.requirement ===
-                "pepperoni"
-            ) {
-
-                currentValue =
-                    game.pepperoni;
-
-            }
-
-
-            if (
-                achievement.requirement ===
-                "perSecond"
-            ) {
-
-                currentValue =
-                    getPerSecond();
-
-            }
-
-
-            if (
-                achievement.requirement ===
-                "level"
-            ) {
-
-                currentValue =
-                    game.level;
-
-            }
-
-
-            if (
-                currentValue >=
-                achievement.target
-            ) {
-
-                game.achievements[
-                    achievement.id
-                ] = true;
-
+                game.achievements[achievementId] =
+                    true;
 
                 showAchievement(
-                    achievement
+                    achievement.name
                 );
-
             }
-
         }
-    );
 
-}
-
-
-// ========================================
-// ACHIEVEMENT POPUP
-// ========================================
-
-function showAchievement(
-    achievement
-) {
-
-    popupText.textContent =
-        achievement.name +
-        " gehaald!";
+        renderAchievements();
+    }
 
 
-    achievementPopup.classList.add(
-        "show"
-    );
+    // =========================================================
+    // ACHIEVEMENT POPUP
+    // =========================================================
 
+    function showAchievement(name) {
 
-    setTimeout(function() {
-
-        achievementPopup.classList.remove(
-            "show"
-        );
-
-    }, 3000);
-
-}
-
-
-// ========================================
-// ACHIEVEMENTS MAKEN
-// ========================================
-
-function createAchievements() {
-
-    achievementList.innerHTML = "";
-
-
-    achievements.forEach(
-        achievement => {
-
-            const unlocked =
-                game.achievements[
-                    achievement.id
-                ];
-
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "achievement " +
-                (
-                    unlocked
-                        ? "unlocked"
-                        : ""
-                );
-
-
-            div.innerHTML = `
-
-                <div class="achievement-title">
-                    ${achievement.name}
-                </div>
-
-                <div class="achievement-description">
-                    ${achievement.description}
-                </div>
-
-                <div class="achievement-status">
-                    ${
-                        unlocked
-                            ? "✓ GEHAALD"
-                            : "🔒 Nog niet gehaald"
-                    }
-                </div>
-
-            `;
-
-
-            achievementList.appendChild(
-                div
-            );
-
+        if (
+            !achievementPopup ||
+            !popupText
+        ) {
+            return;
         }
-    );
 
-}
+        popupText.textContent =
+            "🏆 Achievement: " +
+            name;
 
+        achievementPopup.classList.add("show");
 
-// ========================================
-// SHOP MAKEN
-// ========================================
+        setTimeout(function () {
 
-function createShop() {
+            achievementPopup.classList.remove("show");
 
-    upgradeList.innerHTML = "";
-
-
-    upgrades.forEach(upgrade => {
-
-        const level =
-            getUpgradeLevel(upgrade.id);
+        }, 1800);
+    }
 
 
-        const cost =
-            getUpgradeCost(upgrade);
+    // =========================================================
+    // SHOP MAKEN
+    // =========================================================
 
+    function renderUpgrades() {
 
-        const div =
-            document.createElement(
-                "div"
-            );
+        if (!upgradeList) {
+            return;
+        }
 
+        upgradeList.innerHTML = "";
 
-        div.className =
-            "upgrade";
+        for (
+            const upgradeId in upgrades
+        ) {
 
+            const upgrade =
+                upgrades[upgradeId];
 
-        div.innerHTML = `
+            const owned =
+                game.upgrades[upgradeId] || 0;
 
-            <div class="upgrade-info">
+            const cost =
+                getUpgradeCost(upgradeId);
 
-                <h3>
-                    ${upgrade.name}
-                </h3>
+            const card =
+                document.createElement("div");
 
-                <p>
-                    ${upgrade.description}
-                </p>
+            card.className =
+                "upgrade";
 
-                <p class="level">
-                    Level: ${level}
-                </p>
+            const title =
+                document.createElement("h3");
 
-            </div>
+            title.textContent =
+                upgrade.name;
 
-            <button
-                data-upgrade="${upgrade.id}"
-                ${
-                    game.pepperoni < cost
-                        ? "disabled"
-                        : ""
-                }
-            >
+            const description =
+                document.createElement("p");
 
-                Koop -
-                ${formatNumber(cost)}
+            description.textContent =
+                upgrade.description;
 
-            </button>
+            const levelText =
+                document.createElement("p");
 
-        `;
+            levelText.textContent =
+                "Level: " + owned;
 
+            const button =
+                document.createElement("button");
 
-        upgradeList.appendChild(
-            div
-        );
+            button.textContent =
+                "Koop voor " +
+                formatNumber(cost) +
+                " 🍕";
 
-    });
+            if (
+                game.pepperoni < cost
+            ) {
 
-
-    document
-        .querySelectorAll(
-            "[data-upgrade]"
-        )
-        .forEach(button => {
+                button.disabled = true;
+            }
 
             button.addEventListener(
                 "click",
-                function() {
+                function () {
 
-                    buyUpgrade(
-                        this.dataset.upgrade
-                    );
+                    buyUpgrade(upgradeId);
 
                 }
             );
 
-        });
+            card.appendChild(title);
+            card.appendChild(description);
+            card.appendChild(levelText);
+            card.appendChild(button);
 
-}
-
-
-// ========================================
-// UPGRADE KOPEN
-// ========================================
-
-function buyUpgrade(id) {
-
-    const upgrade =
-        upgrades.find(
-            item => item.id === id
-        );
-
-
-    if (!upgrade) {
-
-        return;
-
+            upgradeList.appendChild(card);
+        }
     }
 
 
-    const cost =
-        getUpgradeCost(upgrade);
+    // =========================================================
+    // UPGRADE KOPEN
+    // =========================================================
 
+    function buyUpgrade(upgradeId) {
 
-    if (
-        game.pepperoni >= cost
-    ) {
+        const cost =
+            getUpgradeCost(upgradeId);
+
+        if (
+            game.pepperoni < cost
+        ) {
+            return;
+        }
 
         game.pepperoni -= cost;
 
-
-        game.upgrades[id] =
-            getUpgradeLevel(id) + 1;
-
+        game.upgrades[upgradeId]++;
 
         addXP(10);
-
 
         saveGame();
 
         updateGame();
-
     }
 
-}
 
+    // =========================================================
+    // ACHIEVEMENTS RENDEREN
+    // =========================================================
 
-// ========================================
-// GAME UPDATE
-// ========================================
+    function renderAchievements() {
 
-function updateGame() {
-
-    pepperoniText.textContent =
-        formatNumber(
-            game.pepperoni
-        );
-
-
-    spinsText.textContent =
-        formatNumber(
-            game.spins
-        );
-
-
-    perSpinText.textContent =
-        formatNumber(
-            getPerSpin()
-        );
-
-
-    perSecondText.textContent =
-        formatNumber(
-            getPerSecond()
-        );
-
-
-    levelText.textContent =
-        game.level;
-
-
-    xpText.textContent =
-        Math.floor(game.xp);
-
-
-    xpNeededText.textContent =
-        getXPNeeded();
-
-
-    const percentage =
-        (
-            game.xp /
-            getXPNeeded()
-        ) * 100;
-
-
-    xpProgress.style.width =
-        percentage + "%";
-
-
-    createShop();
-
-    createAchievements();
-
-    checkAchievements();
-
-    saveGame();
-
-}
-
-
-// ========================================
-// 🍕 PIZZA DRAAIEN
-// ========================================
-
-let vorigeHoek = null;
-
-let totaleDraaiing = 0;
-
-
-// ========================================
-// HOEK BEREKENEN
-// ========================================
-
-function getAngle(event) {
-
-    const rect =
-        pizza.getBoundingClientRect();
-
-
-    const middenX =
-        rect.left +
-        rect.width / 2;
-
-
-    const middenY =
-        rect.top +
-        rect.height / 2;
-
-
-    const x =
-        event.clientX - middenX;
-
-
-    const y =
-        event.clientY - middenY;
-
-
-    return (
-        Math.atan2(y, x) *
-        180 /
-        Math.PI
-    );
-
-}
-
-
-// ========================================
-// 🖱️ + 📱 POINTER BESTURING
-// ========================================
-
-pizzaArea.addEventListener(
-    "pointermove",
-    function(event) {
-
-        // Alleen als er echt met de muis
-        // of vinger wordt bewogen
-
-        if (
-            event.pointerType === "mouse" &&
-            event.buttons === 0
-        ) {
-
+        if (!achievementList) {
             return;
-
         }
 
+        achievementList.innerHTML = "";
 
-        const hoek =
-            getAngle(event);
-
-
-        if (
-            vorigeHoek === null
+        for (
+            const achievementId in achievements
         ) {
 
-            vorigeHoek = hoek;
+            const achievement =
+                achievements[achievementId];
 
-            return;
+            const unlocked =
+                !!game.achievements[
+                    achievementId
+                ];
 
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "achievement";
+
+            if (unlocked) {
+                card.classList.add("unlocked");
+            }
+
+            const title =
+                document.createElement("h3");
+
+            title.textContent =
+                unlocked
+                    ? "🏆 " + achievement.name
+                    : "🔒 " + achievement.name;
+
+            const description =
+                document.createElement("p");
+
+            description.textContent =
+                achievement.description;
+
+            card.appendChild(title);
+            card.appendChild(description);
+
+            achievementList.appendChild(card);
         }
-
-
-        let verschil =
-            hoek - vorigeHoek;
-
-
-        if (verschil > 180) {
-
-            verschil -= 360;
-
-        }
-
-
-        if (verschil < -180) {
-
-            verschil += 360;
-
-        }
-
-
-        totaleDraaiing += verschil;
-
-
-        pizza.style.transform =
-            `rotate(${totaleDraaiing}deg)`;
-
-
-        if (
-            Math.abs(totaleDraaiing)
-            >= 360
-        ) {
-
-            const rondjes =
-                Math.floor(
-                    Math.abs(
-                        totaleDraaiing
-                    ) / 360
-                );
-
-
-            game.spins +=
-                rondjes;
-
-
-            game.pepperoni +=
-                rondjes *
-                getPerSpin();
-
-
-            // XP
-            addXP(
-                rondjes * 5
-            );
-
-
-            totaleDraaiing %= 360;
-
-
-            updateGame();
-
-        }
-
-
-        vorigeHoek = hoek;
-
     }
-);
 
 
-// ========================================
-// POINTER START
-// ========================================
+    // =========================================================
+    // CLICK EFFECT
+    // =========================================================
 
-pizzaArea.addEventListener(
-    "pointerdown",
-    function(event) {
+    function clickEffect(amount) {
 
-        vorigeHoek =
-            getAngle(event);
+        const rect =
+            pizza.getBoundingClientRect();
 
+        const text =
+            document.createElement("div");
+
+        text.textContent =
+            "+" + formatNumber(amount);
+
+        text.style.position =
+            "fixed";
+
+        text.style.left =
+            (rect.left + rect.width / 2) +
+            "px";
+
+        text.style.top =
+            (rect.top + rect.height / 2) +
+            "px";
+
+        text.style.pointerEvents =
+            "none";
+
+        text.style.fontWeight =
+            "bold";
+
+        text.style.fontSize =
+            "22px";
+
+        text.style.zIndex =
+            "9999";
+
+        text.style.transform =
+            "translate(-50%, -50%)";
+
+        text.style.transition =
+            "all 0.7s ease";
+
+        document.body.appendChild(text);
+
+        setTimeout(function () {
+
+            text.style.transform =
+                "translate(-50%, -100px)";
+
+            text.style.opacity =
+                "0";
+
+        }, 20);
+
+        setTimeout(function () {
+
+            text.remove();
+
+        }, 750);
     }
-);
 
 
-// ========================================
-// POINTER STOP
-// ========================================
+    // =========================================================
+    // PIZZA KLIKKEN
+    // =========================================================
 
-pizzaArea.addEventListener(
-    "pointerup",
-    function() {
+    pizza.addEventListener(
+        "click",
+        function () {
 
-        vorigeHoek = null;
-
-    }
-);
-
-
-pizzaArea.addEventListener(
-    "pointercancel",
-    function() {
-
-        vorigeHoek = null;
-
-    }
-);
-
-
-// ========================================
-// 🤖 AUTO PEPPERONI
-// ========================================
-
-setInterval(
-    function() {
-
-        const amount =
-            getPerSecond();
-
-
-        if (amount > 0) {
+            const amount =
+                getPerClick();
 
             game.pepperoni +=
                 amount;
 
+            game.spins++;
 
-            addXP(
-                Math.max(
-                    1,
-                    Math.floor(
-                        amount / 10
-                    )
-                )
+            addXP(5);
+
+            clickEffect(amount);
+
+            pizza.classList.remove(
+                "pizza-click"
             );
 
+            // Forceer opnieuw starten van animatie
+            void pizza.offsetWidth;
+
+            pizza.classList.add(
+                "pizza-click"
+            );
 
             updateGame();
 
         }
-
-    },
-    1000
-);
+    );
 
 
-// ========================================
-// 🗑️ RESET
-// ========================================
+    // =========================================================
+    // TOUCH / MOBIEL
+    // =========================================================
 
-resetButton.addEventListener(
-    "click",
-    function() {
+    pizza.addEventListener(
+        "touchstart",
+        function () {
 
-        const confirmReset =
-            confirm(
-                "Weet je zeker dat je ALLES wilt verwijderen?"
+            pizza.style.transform =
+                "scale(0.95)";
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    pizza.addEventListener(
+        "touchend",
+        function () {
+
+            pizza.style.transform =
+                "";
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    // =========================================================
+    // RESET
+    // =========================================================
+
+    if (resetButton) {
+
+        resetButton.addEventListener(
+            "click",
+            function () {
+
+                const confirmed =
+                    confirm(
+                        "Weet je zeker dat je helemaal opnieuw wilt beginnen?"
+                    );
+
+                if (!confirmed) {
+                    return;
+                }
+
+                game =
+                    createNewGame();
+
+                saveGame();
+
+                updateGame();
+            }
+        );
+    }
+
+
+    // =========================================================
+    // OPSLAAN
+    // =========================================================
+
+    function saveGame() {
+
+        try {
+
+            localStorage.setItem(
+                SAVE_BACKUP_KEY,
+                JSON.stringify(game)
             );
 
+            localStorage.setItem(
+                SAVE_KEY,
+                JSON.stringify(game)
+            );
 
-        if (!confirmReset) {
+        } catch (error) {
 
-            return;
+            console.error(
+                "Opslaan mislukt:",
+                error
+            );
+        }
+    }
 
+
+    // =========================================================
+    // LADEN
+    // =========================================================
+
+    function loadGame() {
+
+        try {
+
+            let savedGame =
+                localStorage.getItem(
+                    SAVE_KEY
+                );
+
+            if (!savedGame) {
+
+                savedGame =
+                    localStorage.getItem(
+                        SAVE_BACKUP_KEY
+                    );
+            }
+
+            if (!savedGame) {
+                return;
+            }
+
+            const parsed =
+                JSON.parse(savedGame);
+
+            const freshGame =
+                createNewGame();
+
+            game = {
+                ...freshGame,
+                ...parsed,
+
+                upgrades: {
+                    ...freshGame.upgrades,
+                    ...(parsed.upgrades || {})
+                },
+
+                achievements: {
+                    ...freshGame.achievements,
+                    ...(parsed.achievements || {})
+                }
+            };
+
+            game.saveVersion =
+                SAVE_VERSION;
+
+        } catch (error) {
+
+            console.error(
+                "Laden mislukt:",
+                error
+            );
+
+            game =
+                createNewGame();
+        }
+    }
+
+
+    // =========================================================
+    // GAME UI UPDATEN
+    // =========================================================
+
+    function updateGame() {
+
+        if (pepperoniElement) {
+
+            pepperoniElement.textContent =
+                formatNumber(
+                    game.pepperoni
+                );
         }
 
+        if (spinsElement) {
 
-        // Zowel save als backup verwijderen
-        localStorage.removeItem(
-            SAVE_KEY
-        );
+            spinsElement.textContent =
+                formatNumber(
+                    game.spins
+                );
+        }
 
-        localStorage.removeItem(
-            SAVE_BACKUP_KEY
-        );
+        if (perSpinElement) {
 
+            perSpinElement.textContent =
+                formatNumber(
+                    getPerClick()
+                );
+        }
 
-        game =
-            createNewGame();
+        if (perSecondElement) {
 
+            perSecondElement.textContent =
+                formatNumber(
+                    getPerSecond()
+                );
+        }
 
-        totaleDraaiing = 0;
+        if (levelElement) {
 
-        vorigeHoek = null;
+            levelElement.textContent =
+                game.level;
+        }
 
+        const xpNeeded =
+            getXPNeeded();
 
-        pizza.style.transform =
-            "rotate(0deg)";
+        if (xpElement) {
 
+            xpElement.textContent =
+                formatNumber(
+                    game.xp
+                );
+        }
 
-        updateGame();
+        if (xpNeededElement) {
 
+            xpNeededElement.textContent =
+                formatNumber(
+                    xpNeeded
+                );
+        }
+
+        if (xpProgress) {
+
+            const percentage =
+                Math.min(
+                    100,
+                    (
+                        game.xp /
+                        xpNeeded
+                    ) * 100
+                );
+
+            xpProgress.style.width =
+                percentage + "%";
+        }
+
+        renderUpgrades();
+        renderAchievements();
+
+        checkAchievements();
+
+        saveGame();
     }
-);
 
 
-// ========================================
-// 🚀 GAME START
-// ========================================
+    // =========================================================
+    // AUTOMATISCHE PEPPERONI
+    // =========================================================
 
-loadGame();
+    setInterval(
+        function () {
 
-updateGame();
+            const amount =
+                getPerSecond();
+
+            if (amount <= 0) {
+                return;
+            }
+
+            game.pepperoni +=
+                amount;
+
+            addXP(
+                Math.floor(amount / 2)
+            );
+
+            updateGame();
+
+        },
+        1000
+    );
+
+
+    // =========================================================
+    // AUTOMATISCH OPSLAAN
+    // =========================================================
+
+    setInterval(
+        function () {
+
+            saveGame();
+
+        },
+        5000
+    );
+
+
+    // =========================================================
+    // PAGINA VERLATEN
+    // =========================================================
+
+    window.addEventListener(
+        "beforeunload",
+        function () {
+
+            saveGame();
+
+        }
+    );
+
+
+    // =========================================================
+    // START GAME
+    // =========================================================
+
+    loadGame();
+
+    updateGame();
+
+});
