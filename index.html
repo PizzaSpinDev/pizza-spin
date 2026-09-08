@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Pizza Spin</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,19 +13,37 @@
 
     <div class="game">
 
-        <!-- 🍕 PIZZA GEDEELTE -->
+        <!-- =====================================================
+             🍕 PIZZA GEDEELTE
+        ====================================================== -->
+
         <div class="pizza-area" id="pizzaArea">
 
+            <!-- TITEL -->
             <h1>🍕 PIZZA SPIN</h1>
 
-            <p class="instruction">
-                🖱️ Beweeg rond de pizza
-                <br>
-                📱 Sleep met je vinger
-            </p>
 
+            <!-- INSTRUCTIES -->
+            <div class="instruction">
+
+                <div>
+                    🖱️ <strong>Computer:</strong>
+                    klik of beweeg rond de pizza
+                </div>
+
+                <div>
+                    📱 <strong>Telefoon:</strong>
+                    tik of sleep met je vinger
+                </div>
+
+            </div>
+
+
+            <!-- PIZZA -->
             <div class="pizza" id="pizza">
+
                 <div class="crust"></div>
+
                 <div class="cheese"></div>
 
                 <div class="pepperoni p1"></div>
@@ -34,31 +54,52 @@
                 <div class="pepperoni p6"></div>
                 <div class="pepperoni p7"></div>
                 <div class="pepperoni p8"></div>
+
             </div>
 
+
+            <!-- DRAAIINGEN -->
             <div class="spin-counter">
+
                 🔄 Draaiingen:
                 <span id="spins">0</span>
+
             </div>
 
-            <!-- ⭐ LEVEL -->
+
+            <!-- =================================================
+                 ⭐ LEVEL
+            ================================================== -->
+
             <div class="level-box">
 
-                ⭐ Level:
-                <span id="level">1</span>
+                <div class="level-title">
 
+                    ⭐ Level:
+                    <span id="level">1</span>
+
+                </div>
+
+
+                <!-- XP BALK -->
                 <div class="xp-bar">
+
                     <div
                         class="xp-progress"
                         id="xpProgress">
                     </div>
+
                 </div>
 
+
+                <!-- XP -->
                 <p>
+
                     XP:
                     <span id="xp">0</span>
                     /
                     <span id="xpNeeded">100</span>
+
                 </p>
 
             </div>
@@ -66,19 +107,29 @@
         </div>
 
 
-        <!-- 🛒 SHOP -->
+
+        <!-- =====================================================
+             🛒 SHOP
+        ====================================================== -->
+
         <div class="shop">
 
             <h2>🛒 UPGRADES</h2>
 
+
+            <!-- PEPPERONI -->
             <div class="pepperoni-count">
+
                 🍕 Pepperoni:
                 <span id="pepperoni">0</span>
+
             </div>
 
+
+            <!-- PRODUCTIE -->
             <div class="production">
 
-                ⚡ Per draai:
+                🖱️ Per klik:
                 <span id="perSpin">1</span>
 
                 <br>
@@ -93,7 +144,11 @@
             <div id="upgradeList"></div>
 
 
-            <!-- 🏆 ACHIEVEMENTS -->
+
+            <!-- =================================================
+                 🏆 ACHIEVEMENTS
+            ================================================== -->
+
             <div class="achievements-section">
 
                 <h2>🏆 ACHIEVEMENTS</h2>
@@ -101,6 +156,7 @@
                 <div id="achievementList"></div>
 
             </div>
+
 
 
             <!-- RESET -->
@@ -117,22 +173,33 @@
     </div>
 
 
-    <!-- 🏆 ACHIEVEMENT POPUP -->
+
+    <!-- =========================================================
+         🏆 ACHIEVEMENT POPUP
+    ========================================================== -->
+
     <div
         id="achievementPopup"
         class="achievement-popup">
 
         <div class="popup-title">
+
             🏆 ACHIEVEMENT!
+
         </div>
 
+
         <div id="popupText">
+
             Achievement gehaald!
+
         </div>
 
     </div>
 
 
+
+    <!-- JAVASCRIPT -->
     <script src="script.js"></script>
 
 </body>
