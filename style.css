@@ -302,7 +302,7 @@ body {
 ========================================================= */
 
 .level-box {
-    margin-top: 5px;
+    margin-top: 4px;
 
     background: #111;
 
@@ -785,7 +785,7 @@ button:disabled {
 
 
     .level-box {
-        margin-top: 9px;
+        margin-top: 4px;
 
         width: 240px;
 
