@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // =========================================================
     // PIZZA SPIN V3
-    // STAP 1 - CLICKER BASIS
+    // STAP 2A - COMBO BASIS
     // =========================================================
 
     const SAVE_KEY = "pizzaSpinSave";
@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const spinsElement =
         document.getElementById("spins");
+
+    const comboElement =
+        document.getElementById("combo");
 
     const perSpinElement =
         document.getElementById("perSpin");
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================================================
-    // CONTROLEREN OF HTML ELEMENTEN BESTAAN
+    // CONTROLEREN
     // =========================================================
 
     if (!pizza) {
@@ -77,8 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             pepperoni: 0,
 
-            // "spins" houden we voorlopig als interne teller.
-            // Voor V3 betekent dit eigenlijk aantal clicks.
+            // Voor V3 gebruiken we spins als click-teller
             spins: 0,
 
             xp: 0,
@@ -106,6 +108,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     let game = createNewGame();
+
+
+    // =========================================================
+    // COMBO
+    // =========================================================
+
+    let combo = 0;
 
 
     // =========================================================
@@ -793,6 +802,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             game.spins++;
 
+            // COMBO +1
+            combo++;
+
             addXP(5);
 
             clickEffect(amount);
@@ -867,6 +879,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 game =
                     createNewGame();
+
+                combo = 0;
 
                 saveGame();
 
@@ -988,6 +1002,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
         }
 
+        // COMBO WEERGEVEN
+        if (comboElement) {
+
+            comboElement.textContent =
+                combo;
+        }
+
         if (perSpinElement) {
 
             perSpinElement.textContent =
@@ -1045,6 +1066,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         renderUpgrades();
+
         renderAchievements();
 
         checkAchievements();
