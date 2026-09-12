@@ -1,13 +1,16 @@
-alert("SCRIPT WERKT");
-
 document.addEventListener("DOMContentLoaded", function () {
+
+    // =========================
+    // OPSLAAN
+    // =========================
 
     const SAVE_KEY = "pizzaSpinSave";
     const BACKUP_KEY = "pizzaSpinBackup";
     const SAVE_VERSION = 3;
 
+
     // =========================
-    // ELEMENTEN
+    // HTML ELEMENTEN
     // =========================
 
     const pizza = document.getElementById("pizza");
@@ -28,8 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const achievementList = document.getElementById("achievementList");
 
-    const achievementPopup = document.getElementById("achievementPopup");
-    const popupText = document.getElementById("popupText");
+    const achievementPopup =
+        document.getElementById("achievementPopup");
+
+    const popupText =
+        document.getElementById("popupText");
 
 
     // =========================
@@ -37,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
 
     function createNewGame() {
+
         return {
             version: SAVE_VERSION,
 
@@ -47,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
             level: 1,
 
             upgrades: {
+
                 pepperoniPower: 0,
                 bigPizza: 0,
                 fastSpin: 0,
@@ -63,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
 
             achievements: {
+
                 firstSpin: false,
                 hundredSpins: false,
                 thousandSpins: false,
@@ -80,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
+
     let game = createNewGame();
 
 
@@ -96,19 +106,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function increaseCombo() {
 
-        // Als combo nog niet maximaal is
         if (combo < MAX_COMBO) {
             combo++;
         }
 
         updateComboDisplay();
 
-        // Oude timer stoppen
         if (comboTimer !== null) {
             clearTimeout(comboTimer);
         }
 
-        // Nieuwe timer starten
         comboTimer = setTimeout(function () {
 
             combo = 0;
@@ -240,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // GETTERS
+    // PER KLIK
     // =========================
 
     function getPerClick() {
@@ -263,6 +270,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // =========================
+    // PER SECONDE
+    // =========================
+
     function getPerSecond() {
 
         let amount = 0;
@@ -283,6 +294,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // =========================
+    // UPGRADE PRIJS
+    // =========================
+
     function getUpgradeCost(key) {
 
         const upgrade = upgradeData[key];
@@ -297,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // NUMMERS WEERGEVEN
+    // NUMMERS
     // =========================
 
     function formatNumber(number) {
@@ -307,39 +322,46 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (number < 1000000) {
+
             return (
-                (number / 1000).toFixed(1)
-                .replace(".0", "")
-                + "K"
+                (number / 1000)
+                    .toFixed(1)
+                    .replace(".0", "") +
+                "K"
             );
         }
 
         if (number < 1000000000) {
+
             return (
-                (number / 1000000).toFixed(1)
-                .replace(".0", "")
-                + "M"
+                (number / 1000000)
+                    .toFixed(1)
+                    .replace(".0", "") +
+                "M"
             );
         }
 
         if (number < 1000000000000) {
+
             return (
-                (number / 1000000000).toFixed(1)
-                .replace(".0", "")
-                + "B"
+                (number / 1000000000)
+                    .toFixed(1)
+                    .replace(".0", "") +
+                "B"
             );
         }
 
         return (
-            (number / 1000000000000).toFixed(1)
-            .replace(".0", "")
-            + "T"
+            (number / 1000000000000)
+                .toFixed(1)
+                .replace(".0", "") +
+            "T"
         );
     }
 
 
     // =========================
-    // XP EN LEVEL
+    // XP
     // =========================
 
     function getXPNeeded() {
@@ -368,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (levelUp) {
 
-            showAchievementPopup(
+            showPopup(
                 "⭐ LEVEL UP! Level " +
                 game.level
             );
@@ -464,7 +486,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
-    function showAchievementPopup(text) {
+    function showPopup(text) {
 
         if (!achievementPopup || !popupText) {
             return;
@@ -496,7 +518,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 game.achievements[key] = true;
 
-                showAchievementPopup(
+                showPopup(
                     "🏆 " +
                     achievement.name
                 );
@@ -533,6 +555,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     ${unlocked ? "🏆" : "🔒"}
                     ${achievement.name}
                 </strong>
+
                 <p>
                     ${achievement.description}
                 </p>
@@ -569,11 +592,15 @@ document.addEventListener("DOMContentLoaded", function () {
             const card =
                 document.createElement("div");
 
-            card.className = "upgrade-card";
+            card.className =
+                "upgrade-card";
 
             card.innerHTML = `
                 <div class="upgrade-info">
-                    <h3>${upgrade.name}</h3>
+
+                    <h3>
+                        ${upgrade.name}
+                    </h3>
 
                     <p>
                         ${upgrade.description}
@@ -582,6 +609,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <small>
                         Level: ${level}
                     </small>
+
                 </div>
 
                 <button
@@ -602,101 +630,109 @@ document.addEventListener("DOMContentLoaded", function () {
     // UPGRADE KOPEN
     // =========================
 
-    upgradeList.addEventListener(
-        "click",
-        function (event) {
+    if (upgradeList) {
 
-            const button =
-                event.target.closest(
-                    ".upgrade-button"
+        upgradeList.addEventListener(
+            "click",
+            function (event) {
+
+                const button =
+                    event.target.closest(
+                        ".upgrade-button"
+                    );
+
+                if (!button) {
+                    return;
+                }
+
+                const key =
+                    button.dataset.upgrade;
+
+                if (!upgradeData[key]) {
+                    return;
+                }
+
+                const cost =
+                    getUpgradeCost(key);
+
+                if (game.pepperoni < cost) {
+                    return;
+                }
+
+                game.pepperoni -= cost;
+
+                game.upgrades[key]++;
+
+                addXP(20);
+
+                updateGame();
+            }
+        );
+    }
+
+
+    // =========================
+    // 🍕 PIZZA KLIKKEN
+    // =========================
+
+    if (pizza) {
+
+        pizza.addEventListener(
+            "click",
+            function () {
+
+                const amount =
+                    getPerClick();
+
+                game.pepperoni += amount;
+
+                game.spins++;
+
+                // COMBO
+                increaseCombo();
+
+                // XP
+                addXP(5);
+
+                // Pizza animatie
+                pizza.classList.remove(
+                    "pizza-click"
                 );
 
-            if (!button) {
-                return;
+                void pizza.offsetWidth;
+
+                pizza.classList.add(
+                    "pizza-click"
+                );
+
+                updateGame();
             }
+        );
 
-            const key =
-                button.dataset.upgrade;
 
-            const cost =
-                getUpgradeCost(key);
+        // =========================
+        // 📱 TOUCH
+        // =========================
 
-            if (game.pepperoni < cost) {
-                return;
+        pizza.addEventListener(
+            "touchstart",
+            function () {
+
+                pizza.style.transform =
+                    "scale(0.95)";
             }
-
-            game.pepperoni -= cost;
-
-            game.upgrades[key]++;
-
-            addXP(20);
-
-            saveGame();
-
-            updateGame();
-        }
-    );
+        );
 
 
-    // =========================
-    // PIZZA KLIKKEN
-    // =========================
+        pizza.addEventListener(
+            "touchend",
+            function () {
 
-    pizza.addEventListener(
-        "click",
-        function () {
-
-            const amount =
-                getPerClick();
-
-            game.pepperoni += amount;
-
-            game.spins++;
-
-            // COMBO
-            increaseCombo();
-
-            // XP
-            addXP(5);
-
-            // Pizza animatie
-            pizza.classList.remove(
-                "pizza-click"
-            );
-
-            void pizza.offsetWidth;
-
-            pizza.classList.add(
-                "pizza-click"
-            );
-
-            updateGame();
-        }
-    );
-
-
-    // =========================
-    // TOUCH EFFECT
-    // =========================
-
-    pizza.addEventListener(
-        "touchstart",
-        function () {
-
-            pizza.style.transform =
-                "scale(0.95)";
-        }
-    );
-
-
-    pizza.addEventListener(
-        "touchend",
-        function () {
-
-            pizza.style.transform =
-                "";
-        }
-    );
+                pizza.style.transform =
+                    "";
+            }
+        );
+    }
 
 
     // =========================
@@ -765,17 +801,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            const freshGame =
+                createNewGame();
+
             game = {
-                ...createNewGame(),
+
+                ...freshGame,
+
                 ...parsed,
 
                 upgrades: {
-                    ...createNewGame().upgrades,
+                    ...freshGame.upgrades,
                     ...(parsed.upgrades || {})
                 },
 
                 achievements: {
-                    ...createNewGame().achievements,
+                    ...freshGame.achievements,
                     ...(parsed.achievements || {})
                 }
             };
@@ -791,42 +832,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // UPDATE GAME
+    // GAME UPDATEN
     // =========================
 
     function updateGame() {
 
         if (pepperoniElement) {
+
             pepperoniElement.textContent =
                 formatNumber(game.pepperoni);
         }
 
         if (spinsElement) {
+
             spinsElement.textContent =
                 formatNumber(game.spins);
         }
 
         if (perSpinElement) {
+
             perSpinElement.textContent =
                 formatNumber(getPerClick());
         }
 
         if (perSecondElement) {
+
             perSecondElement.textContent =
                 formatNumber(getPerSecond());
         }
 
         if (levelElement) {
+
             levelElement.textContent =
                 game.level;
         }
 
         if (xpElement) {
+
             xpElement.textContent =
                 Math.floor(game.xp);
         }
 
         if (xpNeededElement) {
+
             xpNeededElement.textContent =
                 getXPNeeded();
         }
@@ -942,7 +990,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // BIJ PAGINA VERLATEN
+    // PAGINA VERLATEN
     // =========================
 
     window.addEventListener(
