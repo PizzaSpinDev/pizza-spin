@@ -1,3 +1,5 @@
+alert("SCRIPT WERKT");
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const SAVE_KEY = "pizzaSpinSave";
