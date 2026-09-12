@@ -295,7 +295,35 @@ body {
 
     flex-shrink: 0;
 }
+/* =========================================================
+   🔥 COMBO
+========================================================= */
 
+.combo-box {
+    margin-top: 8px;
+
+    font-size: 18px;
+
+    background: #111;
+
+    padding: 8px 18px;
+
+    border: 3px solid #444;
+
+    box-shadow: 5px 5px 0 #000;
+
+    text-align: center;
+
+    width: 280px;
+
+    flex-shrink: 0;
+
+    font-weight: bold;
+}
+
+.combo-box span {
+    color: #ffd166;
+}
 
 /* =========================================================
    ⭐ LEVEL
@@ -782,7 +810,15 @@ button:disabled {
 
         padding: 9px 18px;
     }
+.combo-box {
+    margin-top: 7px;
 
+    font-size: 16px;
+
+    padding: 8px 16px;
+
+    width: 240px;
+}
 
     .level-box {
         margin-top: 4px;
