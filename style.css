@@ -726,6 +726,33 @@ body {
     .shop h2 {
         font-size: 30px;
     }
+   .click-particle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 9999;
+    animation: particle-fly 700ms ease-out forwards;
+}
+
+@keyframes particle-fly {
+
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(
+                var(--particle-x),
+                var(--particle-y)
+            )
+            scale(0.5);
+
+        opacity: 0;
+    }
+}
 
     .pepperoni-count {
         font-size: 23px;
