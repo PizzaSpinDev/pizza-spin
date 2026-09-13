@@ -45,31 +45,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let game = createNewGame();
 
+
     // =========================
     // HTML ELEMENTEN
     // =========================
 
     const pizza = document.getElementById("pizza");
-    const pepperoniElement = document.getElementById("pepperoni");
-    const spinsElement = document.getElementById("spins");
-    const comboElement = document.getElementById("combo");
 
-    const perSpinElement = document.getElementById("perSpin");
-    const perSecondElement = document.getElementById("perSecond");
+    const pepperoniElement =
+        document.getElementById("pepperoni");
 
-    const upgradeList = document.getElementById("upgradeList");
+    const spinsElement =
+        document.getElementById("spins");
 
-    const levelElement = document.getElementById("level");
-    const xpElement = document.getElementById("xp");
-    const xpNeededElement = document.getElementById("xpNeeded");
-    const xpProgress = document.getElementById("xpProgress");
+    const comboElement =
+        document.getElementById("combo");
 
-    const achievementList = document.getElementById("achievementList");
+    const comboBonusElement =
+        document.getElementById("comboBonus");
 
-    const achievementPopup = document.getElementById("achievementPopup");
-    const popupText = document.getElementById("popupText");
+    const perSpinElement =
+        document.getElementById("perSpin");
 
-    const resetButton = document.getElementById("resetButton");
+    const perSecondElement =
+        document.getElementById("perSecond");
+
+    const upgradeList =
+        document.getElementById("upgradeList");
+
+    const levelElement =
+        document.getElementById("level");
+
+    const xpElement =
+        document.getElementById("xp");
+
+    const xpNeededElement =
+        document.getElementById("xpNeeded");
+
+    const xpProgress =
+        document.getElementById("xpProgress");
+
+    const achievementList =
+        document.getElementById("achievementList");
+
+    const achievementPopup =
+        document.getElementById("achievementPopup");
+
+    const popupText =
+        document.getElementById("popupText");
+
+    const resetButton =
+        document.getElementById("resetButton");
 
 
     // =========================
@@ -82,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const MAX_COMBO = 100;
     const COMBO_TIMEOUT = 3000;
 
+
     function increaseCombo() {
 
         if (combo < MAX_COMBO) {
@@ -89,6 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         updateComboDisplay();
+
+        updateComboBonusDisplay();
 
         if (comboTimer !== null) {
             clearTimeout(comboTimer);
@@ -99,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
             combo = 0;
 
             updateComboDisplay();
+
+            updateComboBonusDisplay();
 
             comboTimer = null;
 
@@ -113,9 +144,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (combo >= MAX_COMBO) {
+
             comboElement.textContent = "MAX!";
+
         } else {
+
             comboElement.textContent = combo;
+
         }
     }
 
@@ -150,29 +185,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function getComboBonusText() {
+    function updateComboBonusDisplay() {
 
-        if (combo >= 100) {
-            return "🔥 +100%";
+        if (!comboBonusElement) {
+            return;
         }
 
-        if (combo >= 75) {
-            return "🔥 +75%";
-        }
+        const multiplier =
+            getComboMultiplier();
 
-        if (combo >= 50) {
-            return "🔥 +50%";
-        }
-
-        if (combo >= 25) {
-            return "🔥 +25%";
-        }
-
-        if (combo >= 10) {
-            return "🔥 +10%";
-        }
-
-        return "";
+        comboBonusElement.textContent =
+            "×" + multiplier.toFixed(2).replace(".", ",");
     }
 
 
@@ -182,7 +205,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function formatNumber(number) {
 
-        return Math.floor(number).toLocaleString("nl-NL");
+        return Math.floor(number)
+            .toLocaleString("nl-NL");
 
     }
 
@@ -191,12 +215,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let amount = 1;
 
-        amount += game.upgrades.pepperoniPower * 1;
-        amount += game.upgrades.bigPizza * 2;
-        amount += game.upgrades.fastSpin * 5;
+        amount +=
+            game.upgrades.pepperoniPower * 1;
+
+        amount +=
+            game.upgrades.bigPizza * 2;
+
+        amount +=
+            game.upgrades.fastSpin * 5;
 
         return amount;
-
     }
 
 
@@ -204,18 +232,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let amount = 0;
 
-        amount += game.upgrades.autoPizza * 1;
-        amount += game.upgrades.pizzaRobot * 5;
-        amount += game.upgrades.pizzaChef * 20;
-        amount += game.upgrades.pizzaFactory * 100;
-        amount += game.upgrades.pizzaShop * 500;
-        amount += game.upgrades.pizzaEmpire * 2500;
-        amount += game.upgrades.pizzaRocket * 10000;
-        amount += game.upgrades.spacePizza * 50000;
-        amount += game.upgrades.pizzaGod * 250000;
+        amount +=
+            game.upgrades.autoPizza * 1;
+
+        amount +=
+            game.upgrades.pizzaRobot * 5;
+
+        amount +=
+            game.upgrades.pizzaChef * 20;
+
+        amount +=
+            game.upgrades.pizzaFactory * 100;
+
+        amount +=
+            game.upgrades.pizzaShop * 500;
+
+        amount +=
+            game.upgrades.pizzaEmpire * 2500;
+
+        amount +=
+            game.upgrades.pizzaRocket * 10000;
+
+        amount +=
+            game.upgrades.spacePizza * 50000;
+
+        amount +=
+            game.upgrades.pizzaGod * 250000;
 
         return amount;
-
     }
 
 
@@ -314,18 +358,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getUpgradeCost(upgrade) {
 
-        const level = game.upgrades[upgrade.id];
+        const level =
+            game.upgrades[upgrade.id];
 
         return Math.floor(
-            upgrade.baseCost * Math.pow(1.15, level)
+            upgrade.baseCost *
+            Math.pow(1.15, level)
         );
-
     }
 
 
     function buyUpgrade(upgrade) {
 
-        const cost = getUpgradeCost(upgrade);
+        const cost =
+            getUpgradeCost(upgrade);
 
         if (game.pepperoni < cost) {
             return;
@@ -338,7 +384,6 @@ document.addEventListener("DOMContentLoaded", function () {
         saveGame();
 
         updateGame();
-
     }
 
 
@@ -352,12 +397,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         upgrades.forEach(function (upgrade) {
 
-            const level = game.upgrades[upgrade.id];
-            const cost = getUpgradeCost(upgrade);
+            const level =
+                game.upgrades[upgrade.id];
 
-            const card = document.createElement("div");
+            const cost =
+                getUpgradeCost(upgrade);
 
-            card.className = "upgrade-card";
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "upgrade-card";
 
             card.innerHTML = `
                 <h3>${upgrade.name}</h3>
@@ -371,16 +421,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 </button>
             `;
 
-            const button = card.querySelector("button");
+            const button =
+                card.querySelector("button");
 
-            button.addEventListener("click", function () {
-                buyUpgrade(upgrade);
-            });
+            button.addEventListener(
+                "click",
+                function () {
+                    buyUpgrade(upgrade);
+                }
+            );
 
             upgradeList.appendChild(card);
 
         });
-
     }
 
 
@@ -407,30 +460,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
             showAchievementPopup(
                 "⭐ LEVEL UP! Je bent nu level " +
-                game.level + "!"
+                game.level +
+                "!"
             );
-
         }
 
         checkAchievements();
-
     }
 
 
     function updateXP() {
 
-        const needed = getXPNeeded();
+        const needed =
+            getXPNeeded();
 
         if (levelElement) {
-            levelElement.textContent = game.level;
+            levelElement.textContent =
+                game.level;
         }
 
         if (xpElement) {
-            xpElement.textContent = formatNumber(game.xp);
+            xpElement.textContent =
+                formatNumber(game.xp);
         }
 
         if (xpNeededElement) {
-            xpNeededElement.textContent = formatNumber(needed);
+            xpNeededElement.textContent =
+                formatNumber(needed);
         }
 
         if (xpProgress) {
@@ -443,9 +499,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             xpProgress.style.width =
                 percentage + "%";
-
         }
-
     }
 
 
@@ -520,20 +574,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showAchievementPopup(text) {
 
-        if (!achievementPopup || !popupText) {
+        if (!achievementPopup ||
+            !popupText) {
             return;
         }
 
-        popupText.textContent = text;
+        popupText.textContent =
+            text;
 
-        achievementPopup.classList.add("show");
+        achievementPopup.classList.add(
+            "show"
+        );
 
         setTimeout(function () {
 
-            achievementPopup.classList.remove("show");
+            achievementPopup.classList.remove(
+                "show"
+            );
 
         }, 1500);
-
     }
 
 
@@ -574,23 +633,28 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
 
-        achievements.forEach(function (achievement) {
+        achievements.forEach(
+            function (achievement) {
 
-            if (
-                checks[achievement.id] &&
-                !game.achievements[achievement.id]
-            ) {
+                if (
+                    checks[achievement.id] &&
+                    !game.achievements[
+                        achievement.id
+                    ]
+                ) {
 
-                game.achievements[achievement.id] = true;
+                    game.achievements[
+                        achievement.id
+                    ] = true;
 
-                showAchievementPopup(
-                    "🏆 " + achievement.name
-                );
+                    showAchievementPopup(
+                        "🏆 " +
+                        achievement.name
+                    );
+                }
 
             }
-
-        });
-
+        );
     }
 
 
@@ -602,47 +666,159 @@ document.addEventListener("DOMContentLoaded", function () {
 
         achievementList.innerHTML = "";
 
-        achievements.forEach(function (achievement) {
+        achievements.forEach(
+            function (achievement) {
 
-            const item =
-                document.createElement("div");
+                const item =
+                    document.createElement("div");
 
-            item.className =
-                "achievement-item";
+                item.className =
+                    "achievement-item";
 
-            if (
-                game.achievements[achievement.id]
-            ) {
 
-                item.classList.add("unlocked");
+                if (
+                    game.achievements[
+                        achievement.id
+                    ]
+                ) {
 
-                item.innerHTML = `
-                    🏆 <strong>${achievement.name}</strong>
-                    <br>
-                    <small>${achievement.description}</small>
-                    <br>
-                    ✅ Gehaald
-                `;
+                    item.classList.add(
+                        "unlocked"
+                    );
 
-            } else {
+                    item.innerHTML = `
+                        🏆 <strong>
+                            ${achievement.name}
+                        </strong>
+                        <br>
+                        <small>
+                            ${achievement.description}
+                        </small>
+                        <br>
+                        ✅ Gehaald
+                    `;
 
-                item.innerHTML = `
-                    🔒 <strong>${achievement.name}</strong>
-                    <br>
-                    <small>${achievement.description}</small>
-                `;
+                } else {
+
+                    item.innerHTML = `
+                        🔒 <strong>
+                            ${achievement.name}
+                        </strong>
+                        <br>
+                        <small>
+                            ${achievement.description}
+                        </small>
+                    `;
+                }
+
+                achievementList.appendChild(
+                    item
+                );
 
             }
-
-            achievementList.appendChild(item);
-
-        });
-
+        );
     }
 
 
     // =========================
-    // OPSLAAN / LADEN
+    // PARTICLES
+    // =========================
+
+    function createClickParticles() {
+
+        if (!pizza) {
+            return;
+        }
+
+        const rect =
+            pizza.getBoundingClientRect();
+
+        const centerX =
+            rect.left +
+            rect.width / 2;
+
+        const centerY =
+            rect.top +
+            rect.height / 2;
+
+
+        let amount = 3;
+
+        if (combo >= 25) {
+            amount = 5;
+        }
+
+        if (combo >= 50) {
+            amount = 6;
+        }
+
+        if (combo >= 75) {
+            amount = 8;
+        }
+
+        if (combo >= 100) {
+            amount = 12;
+        }
+
+
+        for (let i = 0; i < amount; i++) {
+
+            const particle =
+                document.createElement("div");
+
+            particle.className =
+                "click-particle";
+
+            particle.textContent =
+                Math.random() > 0.5
+                    ? "🍕"
+                    : "🟠";
+
+
+            particle.style.left =
+                centerX + "px";
+
+            particle.style.top =
+                centerY + "px";
+
+
+            const x =
+                (Math.random() - 0.5) *
+                180;
+
+            const y =
+                (Math.random() - 0.5) *
+                180;
+
+
+            particle.style.setProperty(
+                "--particle-x",
+                x + "px"
+            );
+
+            particle.style.setProperty(
+                "--particle-y",
+                y + "px"
+            );
+
+
+            document.body.appendChild(
+                particle
+            );
+
+
+            setTimeout(function () {
+
+                particle.remove();
+
+            }, 700);
+
+        }
+    }
+
+
+    // =========================
+    // OPSLAAN
     // =========================
 
     function saveGame() {
@@ -655,10 +831,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // =========================
+    // LADEN
+    // =========================
+
     function loadGame() {
 
         const savedGame =
-            localStorage.getItem(SAVE_KEY);
+            localStorage.getItem(
+                SAVE_KEY
+            );
 
         if (!savedGame) {
             return;
@@ -669,20 +851,26 @@ document.addEventListener("DOMContentLoaded", function () {
             const loaded =
                 JSON.parse(savedGame);
 
+
             game = Object.assign(
                 createNewGame(),
                 loaded
             );
 
-            game.upgrades = Object.assign(
-                createNewGame().upgrades,
-                loaded.upgrades || {}
-            );
 
-            game.achievements = Object.assign(
-                createNewGame().achievements,
-                loaded.achievements || {}
-            );
+            game.upgrades =
+                Object.assign(
+                    createNewGame().upgrades,
+                    loaded.upgrades || {}
+                );
+
+
+            game.achievements =
+                Object.assign(
+                    createNewGame().achievements,
+                    loaded.achievements || {}
+                );
+
 
         } catch (error) {
 
@@ -691,12 +879,11 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
         }
-
     }
 
 
     // =========================
-    // UPDATE
+    // UPDATE GAME
     // =========================
 
     function updateGame() {
@@ -704,32 +891,42 @@ document.addEventListener("DOMContentLoaded", function () {
         if (pepperoniElement) {
 
             pepperoniElement.textContent =
-                formatNumber(game.pepperoni);
-
+                formatNumber(
+                    game.pepperoni
+                );
         }
+
 
         if (spinsElement) {
 
             spinsElement.textContent =
-                formatNumber(game.spins);
-
+                formatNumber(
+                    game.spins
+                );
         }
+
 
         if (perSpinElement) {
 
             perSpinElement.textContent =
-                formatNumber(getPerClick());
-
+                formatNumber(
+                    getPerClick()
+                );
         }
+
 
         if (perSecondElement) {
 
             perSecondElement.textContent =
-                formatNumber(getPerSecond());
-
+                formatNumber(
+                    getPerSecond()
+                );
         }
 
+
         updateComboDisplay();
+
+        updateComboBonusDisplay();
 
         updateXP();
 
@@ -752,33 +949,46 @@ document.addEventListener("DOMContentLoaded", function () {
             "click",
             function () {
 
-                // Eerst combo verhogen
+                // Combo verhogen
                 increaseCombo();
 
-                // Basiswaarde
+
+                // Basis klikwaarde
                 const baseAmount =
                     getPerClick();
 
-                // Combo-bonus
+
+                // Combo multiplier
                 const multiplier =
                     getComboMultiplier();
+
 
                 // Eindbedrag
                 const amount =
                     Math.floor(
-                        baseAmount * multiplier
+                        baseAmount *
+                        multiplier
                     );
 
-                // Pepperoni toevoegen
-                game.pepperoni += amount;
 
-                // Klikken tellen
+                // Pepperoni toevoegen
+                game.pepperoni +=
+                    amount;
+
+
+                // Klik tellen
                 game.spins++;
+
 
                 // XP
                 addXP(5);
 
-                // Pizza animatie
+
+                // Particles
+                createClickParticles();
+
+
+                // Pizza klik-animatie
                 pizza.classList.remove(
                     "pizza-click"
                 );
@@ -789,11 +999,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     "pizza-click"
                 );
 
+
+                // Alles vernieuwen
                 updateGame();
 
             }
         );
-
     }
 
 
@@ -801,32 +1012,41 @@ document.addEventListener("DOMContentLoaded", function () {
     // AUTO PRODUCTIE
     // =========================
 
-    setInterval(function () {
+    setInterval(
+        function () {
 
-        const perSecond =
-            getPerSecond();
+            const perSecond =
+                getPerSecond();
 
-        if (perSecond <= 0) {
-            return;
-        }
 
-        game.pepperoni +=
-            perSecond;
+            if (perSecond <= 0) {
+                return;
+            }
 
-        updateGame();
 
-    }, 1000);
+            game.pepperoni +=
+                perSecond;
+
+
+            updateGame();
+
+        },
+        1000
+    );
 
 
     // =========================
     // AUTOSAVE
     // =========================
 
-    setInterval(function () {
+    setInterval(
+        function () {
 
-        saveGame();
+            saveGame();
 
-    }, 5000);
+        },
+        5000
+    );
 
 
     // =========================
@@ -844,21 +1064,29 @@ document.addEventListener("DOMContentLoaded", function () {
                         "Weet je zeker dat je helemaal opnieuw wilt beginnen?"
                     );
 
+
                 if (!confirmed) {
                     return;
                 }
 
-                game = createNewGame();
+
+                game =
+                    createNewGame();
+
 
                 combo = 0;
 
+
                 if (comboTimer !== null) {
 
-                    clearTimeout(comboTimer);
+                    clearTimeout(
+                        comboTimer
+                    );
 
                     comboTimer = null;
 
                 }
+
 
                 saveGame();
 
@@ -866,12 +1094,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
         );
-
     }
 
 
     // =========================
-    // BIJ PAGINA VERLATEN
+    // PAGINA VERLATEN
     // =========================
 
     window.addEventListener(
