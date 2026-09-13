@@ -144,13 +144,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (combo >= MAX_COMBO) {
-
             comboElement.textContent = "MAX!";
-
         } else {
-
             comboElement.textContent = combo;
-
         }
     }
 
@@ -195,7 +191,9 @@ document.addEventListener("DOMContentLoaded", function () {
             getComboMultiplier();
 
         comboBonusElement.textContent =
-            "×" + multiplier.toFixed(2).replace(".", ",");
+            "×" + multiplier
+                .toFixed(2)
+                .replace(".", ",");
     }
 
 
@@ -207,7 +205,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return Math.floor(number)
             .toLocaleString("nl-NL");
-
     }
 
 
@@ -444,7 +441,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function getXPNeeded() {
 
         return game.level * 100;
-
     }
 
 
@@ -721,7 +717,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // PARTICLES
+    // CLICK PARTICLES
     // =========================
 
     function createClickParticles() {
@@ -742,32 +738,38 @@ document.addEventListener("DOMContentLoaded", function () {
             rect.height / 2;
 
 
-        let amount = 3;
+        let particleAmount = 3;
+
 
         if (combo >= 25) {
-            amount = 5;
+            particleAmount = 5;
         }
 
         if (combo >= 50) {
-            amount = 6;
+            particleAmount = 7;
         }
 
         if (combo >= 75) {
-            amount = 8;
+            particleAmount = 9;
         }
 
         if (combo >= 100) {
-            amount = 12;
+            particleAmount = 12;
         }
 
 
-        for (let i = 0; i < amount; i++) {
+        for (
+            let i = 0;
+            i < particleAmount;
+            i++
+        ) {
 
             const particle =
                 document.createElement("div");
 
             particle.className =
                 "click-particle";
+
 
             particle.textContent =
                 Math.random() > 0.5
@@ -807,11 +809,14 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            setTimeout(function () {
+            setTimeout(
+                function () {
 
-                particle.remove();
+                    particle.remove();
 
-            }, 700);
+                },
+                700
+            );
 
         }
     }
@@ -988,7 +993,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 createClickParticles();
 
 
-                // Pizza klik-animatie
+                // Pizza animatie
                 pizza.classList.remove(
                     "pizza-click"
                 );
@@ -1000,7 +1005,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
 
-                // Alles vernieuwen
                 updateGame();
 
             }
