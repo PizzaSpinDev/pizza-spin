@@ -584,6 +584,7 @@ body {
 }
 
 @keyframes pizzaClick {
+
     0% {
         transform: scale(1);
     }
@@ -594,6 +595,47 @@ body {
 
     100% {
         transform: scale(1);
+    }
+}
+
+
+/* =====================================================
+   🍕 KLIK PARTICLES
+===================================================== */
+
+.click-particle {
+    position: fixed;
+
+    pointer-events: none;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    z-index: 9999;
+
+    animation: particle-fly 700ms ease-out forwards;
+}
+
+@keyframes particle-fly {
+
+    0% {
+        transform:
+            translate(0, 0)
+            scale(1);
+
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(
+                var(--particle-x),
+                var(--particle-y)
+            )
+            scale(0.5);
+
+        opacity: 0;
     }
 }
 
@@ -679,6 +721,7 @@ body {
 
     .upgrade-card {
         grid-template-columns: 1fr;
+
         gap: 12px;
     }
 
@@ -714,45 +757,20 @@ body {
 
     .spin-counter {
         min-width: 230px;
+
         font-size: 23px;
     }
 
     .combo-box,
     .level-box {
         width: 300px;
+
         min-width: 0;
     }
 
     .shop h2 {
         font-size: 30px;
     }
-   .click-particle {
-    position: fixed;
-    pointer-events: none;
-    font-size: 22px;
-    font-weight: bold;
-    z-index: 9999;
-    animation: particle-fly 700ms ease-out forwards;
-}
-
-@keyframes particle-fly {
-
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform:
-            translate(
-                var(--particle-x),
-                var(--particle-y)
-            )
-            scale(0.5);
-
-        opacity: 0;
-    }
-}
 
     .pepperoni-count {
         font-size: 23px;
