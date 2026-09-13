@@ -638,7 +638,50 @@ body {
         opacity: 0;
     }
 }
+/* =====================================================
+   🍕 PIZZA PARTICLES
+===================================================== */
 
+.click-particle {
+    position: fixed;
+
+    width: 14px;
+    height: 14px;
+
+    background: #ffd45c;
+
+    border: 3px solid #9b7b25;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 99999;
+
+    animation: particle-fly 700ms ease-out forwards;
+}
+
+@keyframes particle-fly {
+
+    0% {
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(
+                calc(-50% + var(--particle-x)),
+                calc(-50% + var(--particle-y))
+            )
+            scale(0);
+
+        opacity: 0;
+    }
+}
 
 /* =====================================================
    ACHIEVEMENT POPUP
