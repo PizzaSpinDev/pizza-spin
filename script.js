@@ -720,107 +720,64 @@ document.addEventListener("DOMContentLoaded", function () {
     // CLICK PARTICLES
     // =========================
 
-    function createClickParticles() {
+function createClickParticles() {
 
-        if (!pizza) {
-            return;
-        }
-
-        const rect =
-            pizza.getBoundingClientRect();
-
-        const centerX =
-            rect.left +
-            rect.width / 2;
-
-        const centerY =
-            rect.top +
-            rect.height / 2;
-
-
-        let particleAmount = 3;
-
-
-        if (combo >= 25) {
-            particleAmount = 5;
-        }
-
-        if (combo >= 50) {
-            particleAmount = 7;
-        }
-
-        if (combo >= 75) {
-            particleAmount = 9;
-        }
-
-        if (combo >= 100) {
-            particleAmount = 12;
-        }
-
-
-        for (
-            let i = 0;
-            i < particleAmount;
-            i++
-        ) {
-
-            const particle =
-                document.createElement("div");
-
-            particle.className =
-                "click-particle";
-
-
-            particle.textContent =
-                Math.random() > 0.5
-                    ? "🍕"
-                    : "🟠";
-
-
-            particle.style.left =
-                centerX + "px";
-
-            particle.style.top =
-                centerY + "px";
-
-
-            const x =
-                (Math.random() - 0.5) *
-                180;
-
-            const y =
-                (Math.random() - 0.5) *
-                180;
-
-
-            particle.style.setProperty(
-                "--particle-x",
-                x + "px"
-            );
-
-            particle.style.setProperty(
-                "--particle-y",
-                y + "px"
-            );
-
-
-            document.body.appendChild(
-                particle
-            );
-
-
-            setTimeout(
-                function () {
-
-                    particle.remove();
-
-                },
-                700
-            );
-
-        }
+    if (!pizza) {
+        return;
     }
 
+    const rect = pizza.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    let particleAmount = 4;
+
+    if (combo >= 25) {
+        particleAmount = 6;
+    }
+
+    if (combo >= 50) {
+        particleAmount = 8;
+    }
+
+    if (combo >= 75) {
+        particleAmount = 10;
+    }
+
+    if (combo >= 100) {
+        particleAmount = 14;
+    }
+
+    for (let i = 0; i < particleAmount; i++) {
+
+        const particle = document.createElement("div");
+
+        particle.className = "click-particle";
+
+        particle.style.left = centerX + "px";
+        particle.style.top = centerY + "px";
+
+        const x = (Math.random() - 0.5) * 250;
+        const y = (Math.random() - 0.5) * 250;
+
+        particle.style.setProperty(
+            "--particle-x",
+            x + "px"
+        );
+
+        particle.style.setProperty(
+            "--particle-y",
+            y + "px"
+        );
+
+        document.body.appendChild(particle);
+
+        setTimeout(function () {
+            particle.remove();
+        }, 700);
+    }
+}
 
     // =========================
     // OPSLAAN
