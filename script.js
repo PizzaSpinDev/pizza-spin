@@ -99,6 +99,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
+    // CRITICAL CLICK
+    // =========================
+
+    const CRITICAL_CHANCE = 0.05;
+    const CRITICAL_MULTIPLIER = 2;
+
+    let lastClickWasCritical = false;
+
+
+    // =========================
     // COMBO
     // =========================
 
@@ -191,7 +201,8 @@ document.addEventListener("DOMContentLoaded", function () {
             getComboMultiplier();
 
         comboBonusElement.textContent =
-            "×" + multiplier
+            "×" +
+            multiplier
                 .toFixed(2)
                 .replace(".", ",");
     }
@@ -720,64 +731,140 @@ document.addEventListener("DOMContentLoaded", function () {
     // CLICK PARTICLES
     // =========================
 
-function createClickParticles() {
+    function createClickParticles(isCritical = false) {
 
-    if (!pizza) {
-        return;
+        if (!pizza) {
+            return;
+        }
+
+        const rect =
+            pizza.getBoundingClientRect();
+
+        const centerX =
+            rect.left +
+            rect.width / 2;
+
+        const centerY =
+            rect.top +
+            rect.height / 2;
+
+
+        let particleAmount = 4;
+
+        if (combo >= 25) {
+            particleAmount = 6;
+        }
+
+        if (combo >= 50) {
+            particleAmount = 8;
+        }
+
+        if (combo >= 75) {
+            particleAmount = 10;
+        }
+
+        if (combo >= 100) {
+            particleAmount = 14;
+        }
+
+
+        // Critical krijgt extra particles
+        if (isCritical) {
+            particleAmount = 20;
+        }
+
+
+        for (
+            let i = 0;
+            i < particleAmount;
+            i++
+        ) {
+
+            const particle =
+                document.createElement("div");
+
+            particle.className =
+                "click-particle";
+
+
+            particle.style.left =
+                centerX + "px";
+
+            particle.style.top =
+                centerY + "px";
+
+
+            const spread =
+                isCritical ? 350 : 250;
+
+
+            const x =
+                (Math.random() - 0.5) *
+                spread;
+
+            const y =
+                (Math.random() - 0.5) *
+                spread;
+
+
+            particle.style.setProperty(
+                "--particle-x",
+                x + "px"
+            );
+
+            particle.style.setProperty(
+                "--particle-y",
+                y + "px"
+            );
+
+
+            if (isCritical) {
+
+                particle.style.width =
+                    "20px";
+
+                particle.style.height =
+                    "20px";
+
+                particle.style.background =
+                    "#ff7b00";
+
+                particle.style.border =
+                    "3px solid #ff3d00";
+            }
+
+
+            document.body.appendChild(
+                particle
+            );
+
+
+            setTimeout(
+                function () {
+
+                    particle.remove();
+
+                },
+                700
+            );
+
+        }
     }
 
-    const rect = pizza.getBoundingClientRect();
 
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    // =========================
+    // CRITICAL POPUP
+    // =========================
 
-    let particleAmount = 4;
+    function showCriticalClick(amount) {
 
-    if (combo >= 25) {
-        particleAmount = 6;
-    }
-
-    if (combo >= 50) {
-        particleAmount = 8;
-    }
-
-    if (combo >= 75) {
-        particleAmount = 10;
-    }
-
-    if (combo >= 100) {
-        particleAmount = 14;
-    }
-
-    for (let i = 0; i < particleAmount; i++) {
-
-        const particle = document.createElement("div");
-
-        particle.className = "click-particle";
-
-        particle.style.left = centerX + "px";
-        particle.style.top = centerY + "px";
-
-        const x = (Math.random() - 0.5) * 250;
-        const y = (Math.random() - 0.5) * 250;
-
-        particle.style.setProperty(
-            "--particle-x",
-            x + "px"
+        showAchievementPopup(
+            "💥 CRITICAL CLICK! +" +
+            formatNumber(amount) +
+            " 🍕"
         );
-
-        particle.style.setProperty(
-            "--particle-y",
-            y + "px"
-        );
-
-        document.body.appendChild(particle);
-
-        setTimeout(function () {
-            particle.remove();
-        }, 700);
     }
-}
+
 
     // =========================
     // OPSLAAN
@@ -921,16 +1008,43 @@ function createClickParticles() {
 
 
                 // Combo multiplier
-                const multiplier =
+                const comboMultiplier =
                     getComboMultiplier();
 
 
-                // Eindbedrag
-                const amount =
+                // Normale opbrengst
+                const normalAmount =
                     Math.floor(
                         baseAmount *
-                        multiplier
+                        comboMultiplier
                     );
+
+
+                // Critical check
+                const isCritical =
+                    Math.random() <
+                    CRITICAL_CHANCE;
+
+
+                let amount =
+                    normalAmount;
+
+
+                if (isCritical) {
+
+                    amount =
+                        Math.floor(
+                            normalAmount *
+                            CRITICAL_MULTIPLIER
+                        );
+
+                    lastClickWasCritical = true;
+
+                } else {
+
+                    lastClickWasCritical = false;
+
+                }
 
 
                 // Pepperoni toevoegen
@@ -947,7 +1061,18 @@ function createClickParticles() {
 
 
                 // Particles
-                createClickParticles();
+                createClickParticles(
+                    isCritical
+                );
+
+
+                // Critical melding
+                if (isCritical) {
+
+                    showCriticalClick(
+                        amount
+                    );
+                }
 
 
                 // Pizza animatie
