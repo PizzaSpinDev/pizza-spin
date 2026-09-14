@@ -102,10 +102,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // CRITICAL CLICK
     // =========================
 
+    // 5% kans op een critical click
     const CRITICAL_CHANCE = 0.05;
-    const CRITICAL_MULTIPLIER = 2;
 
-    let lastClickWasCritical = false;
+    // Critical geeft 2x zoveel
+    const CRITICAL_MULTIPLIER = 2;
 
 
     // =========================
@@ -116,6 +117,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let comboTimer = null;
 
     const MAX_COMBO = 100;
+
+    // Combo reset na 3 seconden
     const COMBO_TIMEOUT = 3000;
 
 
@@ -126,19 +129,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         updateComboDisplay();
-
         updateComboBonusDisplay();
+
 
         if (comboTimer !== null) {
             clearTimeout(comboTimer);
         }
+
 
         comboTimer = setTimeout(function () {
 
             combo = 0;
 
             updateComboDisplay();
-
             updateComboBonusDisplay();
 
             comboTimer = null;
@@ -219,53 +222,75 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // =========================
+    // PEPPERONI PER CLICK
+    // =========================
+
     function getPerClick() {
 
         let amount = 1;
 
+
         amount +=
             game.upgrades.pepperoniPower * 1;
+
 
         amount +=
             game.upgrades.bigPizza * 2;
 
+
         amount +=
             game.upgrades.fastSpin * 5;
+
 
         return amount;
     }
 
 
+    // =========================
+    // PEPPERONI PER SECOND
+    // =========================
+
     function getPerSecond() {
 
         let amount = 0;
 
+
         amount +=
             game.upgrades.autoPizza * 1;
+
 
         amount +=
             game.upgrades.pizzaRobot * 5;
 
+
         amount +=
             game.upgrades.pizzaChef * 20;
+
 
         amount +=
             game.upgrades.pizzaFactory * 100;
 
+
         amount +=
             game.upgrades.pizzaShop * 500;
+
 
         amount +=
             game.upgrades.pizzaEmpire * 2500;
 
+
         amount +=
             game.upgrades.pizzaRocket * 10000;
+
 
         amount +=
             game.upgrades.spacePizza * 50000;
 
+
         amount +=
             game.upgrades.pizzaGod * 250000;
+
 
         return amount;
     }
@@ -381,13 +406,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const cost =
             getUpgradeCost(upgrade);
 
+
         if (game.pepperoni < cost) {
             return;
         }
 
+
         game.pepperoni -= cost;
 
         game.upgrades[upgrade.id]++;
+
 
         saveGame();
 
@@ -401,21 +429,27 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         upgradeList.innerHTML = "";
+
 
         upgrades.forEach(function (upgrade) {
 
             const level =
                 game.upgrades[upgrade.id];
 
+
             const cost =
                 getUpgradeCost(upgrade);
+
 
             const card =
                 document.createElement("div");
 
+
             card.className =
                 "upgrade-card";
+
 
             card.innerHTML = `
                 <h3>${upgrade.name}</h3>
@@ -429,15 +463,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 </button>
             `;
 
+
             const button =
                 card.querySelector("button");
+
 
             button.addEventListener(
                 "click",
                 function () {
+
                     buyUpgrade(upgrade);
+
                 }
             );
+
 
             upgradeList.appendChild(card);
 
@@ -459,11 +498,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         game.xp += amount;
 
+
         while (game.xp >= getXPNeeded()) {
 
             game.xp -= getXPNeeded();
 
             game.level++;
+
 
             showAchievementPopup(
                 "⭐ LEVEL UP! Je bent nu level " +
@@ -471,6 +512,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "!"
             );
         }
+
 
         checkAchievements();
     }
@@ -481,20 +523,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const needed =
             getXPNeeded();
 
+
         if (levelElement) {
+
             levelElement.textContent =
                 game.level;
         }
 
+
         if (xpElement) {
+
             xpElement.textContent =
                 formatNumber(game.xp);
         }
 
+
         if (xpNeededElement) {
+
             xpNeededElement.textContent =
                 formatNumber(needed);
         }
+
 
         if (xpProgress) {
 
@@ -503,6 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     (game.xp / needed) * 100,
                     100
                 );
+
 
             xpProgress.style.width =
                 percentage + "%";
@@ -581,17 +631,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showAchievementPopup(text) {
 
-        if (!achievementPopup ||
-            !popupText) {
+        if (
+            !achievementPopup ||
+            !popupText
+        ) {
             return;
         }
+
 
         popupText.textContent =
             text;
 
+
         achievementPopup.classList.add(
             "show"
         );
+
 
         setTimeout(function () {
 
@@ -602,6 +657,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1500);
     }
 
+
+    // =========================
+    // ACHIEVEMENTS CHECKEN
+    // =========================
 
     function checkAchievements() {
 
@@ -654,6 +713,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         achievement.id
                     ] = true;
 
+
                     showAchievementPopup(
                         "🏆 " +
                         achievement.name
@@ -671,13 +731,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         achievementList.innerHTML = "";
+
 
         achievements.forEach(
             function (achievement) {
 
                 const item =
                     document.createElement("div");
+
 
                 item.className =
                     "achievement-item";
@@ -693,15 +756,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         "unlocked"
                     );
 
+
                     item.innerHTML = `
                         🏆 <strong>
                             ${achievement.name}
                         </strong>
+
                         <br>
+
                         <small>
                             ${achievement.description}
                         </small>
+
                         <br>
+
                         ✅ Gehaald
                     `;
 
@@ -711,12 +779,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         🔒 <strong>
                             ${achievement.name}
                         </strong>
+
                         <br>
+
                         <small>
                             ${achievement.description}
                         </small>
                     `;
                 }
+
 
                 achievementList.appendChild(
                     item
@@ -737,12 +808,15 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         const rect =
             pizza.getBoundingClientRect();
+
 
         const centerX =
             rect.left +
             rect.width / 2;
+
 
         const centerY =
             rect.top +
@@ -751,24 +825,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let particleAmount = 4;
 
+
         if (combo >= 25) {
             particleAmount = 6;
         }
+
 
         if (combo >= 50) {
             particleAmount = 8;
         }
 
+
         if (combo >= 75) {
             particleAmount = 10;
         }
+
 
         if (combo >= 100) {
             particleAmount = 14;
         }
 
 
-        // Critical krijgt extra particles
+        // Critical = extra particles
         if (isCritical) {
             particleAmount = 20;
         }
@@ -783,6 +861,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const particle =
                 document.createElement("div");
 
+
             particle.className =
                 "click-particle";
 
@@ -790,17 +869,21 @@ document.addEventListener("DOMContentLoaded", function () {
             particle.style.left =
                 centerX + "px";
 
+
             particle.style.top =
                 centerY + "px";
 
 
             const spread =
-                isCritical ? 350 : 250;
+                isCritical
+                    ? 350
+                    : 250;
 
 
             const x =
                 (Math.random() - 0.5) *
                 spread;
+
 
             const y =
                 (Math.random() - 0.5) *
@@ -812,22 +895,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 x + "px"
             );
 
+
             particle.style.setProperty(
                 "--particle-y",
                 y + "px"
             );
 
 
+            // Critical particles zijn groter
             if (isCritical) {
 
                 particle.style.width =
                     "20px";
 
+
                 particle.style.height =
                     "20px";
 
+
                 particle.style.background =
                     "#ff7b00";
+
 
                 particle.style.border =
                     "3px solid #ff3d00";
@@ -847,7 +935,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 700
             );
-
         }
     }
 
@@ -876,7 +963,6 @@ document.addEventListener("DOMContentLoaded", function () {
             SAVE_KEY,
             JSON.stringify(game)
         );
-
     }
 
 
@@ -891,9 +977,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 SAVE_KEY
             );
 
+
         if (!savedGame) {
             return;
         }
+
 
         try {
 
@@ -926,13 +1014,12 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(
                 "Save kon niet worden geladen."
             );
-
         }
     }
 
 
     // =========================
-    // UPDATE GAME
+    // GAME UPDATEN
     // =========================
 
     function updateGame() {
@@ -984,7 +1071,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderAchievements();
 
         checkAchievements();
-
     }
 
 
@@ -998,21 +1084,29 @@ document.addEventListener("DOMContentLoaded", function () {
             "click",
             function () {
 
-                // Combo verhogen
+                // -------------------------
+                // 1. COMBO
+                // -------------------------
+
                 increaseCombo();
 
 
-                // Basis klikwaarde
+                // -------------------------
+                // 2. BASIS OPBRENGST
+                // -------------------------
+
                 const baseAmount =
                     getPerClick();
 
 
-                // Combo multiplier
+                // -------------------------
+                // 3. COMBO BONUS
+                // -------------------------
+
                 const comboMultiplier =
                     getComboMultiplier();
 
 
-                // Normale opbrengst
                 const normalAmount =
                     Math.floor(
                         baseAmount *
@@ -1020,7 +1114,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                // Critical check
+                // -------------------------
+                // 4. CRITICAL CHECK
+                // -------------------------
+
                 const isCritical =
                     Math.random() <
                     CRITICAL_CHANCE;
@@ -1030,6 +1127,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     normalAmount;
 
 
+                // -------------------------
+                // 5. CRITICAL BONUS
+                // -------------------------
+
                 if (isCritical) {
 
                     amount =
@@ -1037,36 +1138,44 @@ document.addEventListener("DOMContentLoaded", function () {
                             normalAmount *
                             CRITICAL_MULTIPLIER
                         );
-
-                    lastClickWasCritical = true;
-
-                } else {
-
-                    lastClickWasCritical = false;
-
                 }
 
 
-                // Pepperoni toevoegen
+                // -------------------------
+                // 6. PEPPERONI
+                // -------------------------
+
                 game.pepperoni +=
                     amount;
 
 
-                // Klik tellen
+                // -------------------------
+                // 7. KLIK TELLEN
+                // -------------------------
+
                 game.spins++;
 
 
-                // XP
+                // -------------------------
+                // 8. XP
+                // -------------------------
+
                 addXP(5);
 
 
-                // Particles
+                // -------------------------
+                // 9. PARTICLES
+                // -------------------------
+
                 createClickParticles(
                     isCritical
                 );
 
 
-                // Critical melding
+                // -------------------------
+                // 10. CRITICAL POPUP
+                // -------------------------
+
                 if (isCritical) {
 
                     showCriticalClick(
@@ -1075,17 +1184,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Pizza animatie
+                // -------------------------
+                // 11. PIZZA ANIMATIE
+                // -------------------------
+
                 pizza.classList.remove(
                     "pizza-click"
                 );
 
+
                 void pizza.offsetWidth;
+
 
                 pizza.classList.add(
                     "pizza-click"
                 );
 
+
+                // -------------------------
+                // 12. UPDATE
+                // -------------------------
 
                 updateGame();
 
@@ -1170,7 +1288,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
                     comboTimer = null;
-
                 }
 
 
