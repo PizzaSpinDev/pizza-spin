@@ -1,596 +1,138 @@
-/* =====================================================
-   BASIS
-===================================================== */
-
 * {
     box-sizing: border-box;
 }
 
-html,
 body {
     margin: 0;
-    padding: 0;
-    min-height: 100%;
-}
+    min-height: 100vh;
 
-body {
-    background: #1f1f1f;
+    font-family: "Courier New", monospace;
+
+    background:
+        radial-gradient(circle at top, #3a3a3a 0%, #171717 55%, #0b0b0b 100%);
+
     color: white;
-    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
 }
 
 
-/* =====================================================
-   HOOFD GAME
-===================================================== */
+/* =========================
+   HOOFD CONTAINER
+========================= */
 
-.game {
+.game-container {
+    width: min(1200px, 94%);
+    margin: 30px auto;
+
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 100vh;
+    gap: 25px;
 }
 
 
-/* =====================================================
-   LINKERKANT - PIZZA
-===================================================== */
+/* =========================
+   ALGEMENE PANELEN
+========================= */
 
-.pizza-area {
-    min-height: 100vh;
+.panel {
+    background: #202020;
+
+    border: 4px solid #555;
+    border-radius: 14px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 8px 0 #0b0b0b,
+        0 15px 30px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================
+   TITELS
+========================= */
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+h1 {
+    text-align: center;
+
+    font-size: clamp(28px, 5vw, 50px);
+
+    color: #ffd45c;
+
+    text-shadow:
+        4px 4px 0 #8b671d;
+}
+
+h2 {
+    color: #ffd45c;
+
+    border-bottom: 3px solid #444;
+
+    padding-bottom: 10px;
+}
+
+
+/* =========================
+   PIZZA GEDEELTE
+========================= */
+
+.pizza-section {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    padding-top: 35px;
-    padding-bottom: 40px;
-
-    border-right: 5px solid #333;
+    text-align: center;
 }
-
-.pizza-area h1 {
-    margin: 0 0 10px 0;
-
-    font-size: 42px;
-    color: #ffd45c;
-
-    text-shadow: 4px 4px 0 #111;
-}
-
-
-/* =====================================================
-   INSTRUCTIES
-===================================================== */
-
-.instruction {
-    font-size: 20px;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.instruction strong {
-    color: #ffd45c;
-}
-
-
-/* =====================================================
-   PIZZA
-===================================================== */
 
 .pizza {
-    position: relative;
+    width: min(320px, 75vw);
+    height: min(320px, 75vw);
 
-    width: 375px;
-    height: 375px;
-
-    margin-top: 5px;
-    margin-bottom: 15px;
-
-    border-radius: 50%;
+    object-fit: contain;
 
     cursor: pointer;
 
-    transition: transform 0.08s ease;
+    user-select: none;
+    -webkit-user-drag: none;
 
-    filter: drop-shadow(8px 10px 0 #080808);
+    transition:
+        transform 0.08s ease,
+        filter 0.15s ease;
+}
+
+.pizza:hover {
+    transform: scale(1.04);
 }
 
 .pizza:active {
-    transform: scale(0.96);
+    transform: scale(0.92);
+    filter: brightness(1.2);
 }
 
 
-/* =====================================================
-   KORST
-===================================================== */
-
-.crust {
-    position: absolute;
-
-    width: 100%;
-    height: 100%;
-
-    border-radius: 50%;
-
-    background: #b96516;
-
-    border: 14px solid #8b4810;
-
-    box-shadow:
-        inset 0 0 0 8px #d47a20,
-        inset 0 0 0 13px #9b5011;
-}
-
-
-/* =====================================================
-   KAAS
-===================================================== */
-
-.cheese {
-    position: absolute;
-
-    width: 78%;
-    height: 78%;
-
-    left: 11%;
-    top: 11%;
-
-    border-radius: 50%;
-
-    background: #ffd95a;
-
-    border: 8px solid #9f5411;
-}
-
-
-/* =====================================================
-   PEPPERONI
-===================================================== */
-
-.pepperoni {
-    position: absolute;
-
-    width: 48px;
-    height: 48px;
-
-    border-radius: 50%;
-
-    background: #d63a27;
-
-    border: 7px solid #9d241b;
-
-    z-index: 5;
-
-    box-shadow:
-        inset 5px 5px 0 rgba(255, 100, 70, 0.45);
-}
-
-
-/* Posities */
-
-.p1 {
-    left: 28%;
-    top: 22%;
-}
-
-.p2 {
-    left: 51%;
-    top: 18%;
-}
-
-.p3 {
-    left: 70%;
-    top: 30%;
-}
-
-.p4 {
-    left: 46%;
-    top: 43%;
-}
-
-.p5 {
-    left: 66%;
-    top: 51%;
-}
-
-.p6 {
-    left: 25%;
-    top: 62%;
-}
-
-.p7 {
-    left: 50%;
-    top: 66%;
-}
-
-.p8 {
-    left: 70%;
-    top: 66%;
-}
-
-
-/* =====================================================
-   KLIK TELLER
-===================================================== */
-
-.spin-counter {
-    min-width: 255px;
-
-    padding: 14px 25px;
-
-    margin-bottom: 8px;
-
-    text-align: center;
-
-    background: #111;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-
-    font-size: 27px;
-}
-
-.spin-counter span {
-    color: #ffd45c;
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   COMBO
-===================================================== */
-
-.combo-box {
-    min-width: 335px;
-
-    padding: 13px 20px;
-
-    margin-bottom: 8px;
-
-    text-align: center;
-
-    background: #111;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-
-    font-size: 24px;
-
-    font-weight: bold;
-}
-
-.combo-box span {
-    color: #ffd45c;
-}
-
-
-/* =====================================================
-   LEVEL
-===================================================== */
-
-.level-box {
-    width: 335px;
-
-    padding: 14px 20px;
-
-    background: #111;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-
-    text-align: center;
-}
-
-.level-title {
-    font-size: 24px;
-    font-weight: bold;
-
-    margin-bottom: 12px;
-}
-
-.level-title span {
-    color: #ffd45c;
-}
-
-
-/* =====================================================
-   XP BALK
-===================================================== */
-
-.xp-bar {
-    width: 100%;
-    height: 25px;
-
-    background: #333;
-
-    border: 3px solid #555;
-
-    overflow: hidden;
-}
-
-.xp-progress {
-    width: 0%;
-    height: 100%;
-
-    background: #ffd45c;
-
-    transition: width 0.2s ease;
-}
-
-.level-box p {
-    margin: 8px 0 0;
-
-    font-size: 16px;
-
-    color: #ccc;
-}
-
-
-/* =====================================================
-   RECHTERKANT - SHOP
-===================================================== */
-
-.shop {
-    min-height: 100vh;
-
-    padding: 35px 35px 60px;
-
-    background: #151515;
-
-    overflow-y: auto;
-}
-
-.shop h2 {
-    margin: 0 0 25px;
-
-    font-size: 36px;
-
-    color: #ffd45c;
-
-    text-shadow: 3px 3px 0 #080808;
-}
-
-
-/* =====================================================
-   PEPPERONI TELLER
-===================================================== */
-
-.pepperoni-count {
-    padding: 22px;
-
-    margin-bottom: 18px;
-
-    background: #111;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-
-    font-size: 28px;
-}
-
-.pepperoni-count span {
-    color: #ffd45c;
-
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   PRODUCTIE
-===================================================== */
-
-.production {
-    padding: 18px 22px;
-
-    margin-bottom: 25px;
-
-    background: #111;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-
-    font-size: 20px;
-
-    line-height: 1.8;
-}
-
-.production span {
-    color: #ffd45c;
-
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   UPGRADE LIJST
-===================================================== */
-
-#upgradeList {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 18px;
-}
-
-
-/* =====================================================
-   UPGRADE KAART
-===================================================== */
-
-.upgrade-card {
-    display: grid;
-
-    grid-template-columns: 1.2fr 1fr auto;
-
-    align-items: center;
-
-    gap: 20px;
-
-    padding: 18px 20px;
-
-    background: #242424;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-
-    min-height: 105px;
-}
-
-.upgrade-card h3 {
-    margin: 0;
-
-    font-size: 22px;
-}
-
-.upgrade-card p {
-    margin: 0;
-
-    color: #bbb;
-
-    line-height: 1.4;
-}
-
-.upgrade-card button {
-    border: none;
-
-    background: #ffd45c;
-
-    color: #111;
-
-    padding: 15px 20px;
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    box-shadow: 4px 4px 0 #9b7b25;
-
-    white-space: nowrap;
-}
-
-.upgrade-card button:hover {
-    filter: brightness(1.08);
-}
-
-.upgrade-card button:active {
-    transform: translate(2px, 2px);
-
-    box-shadow: 2px 2px 0 #9b7b25;
-}
-
-.upgrade-card button:disabled {
-    background: #555;
-
-    color: #999;
-
-    box-shadow: none;
-
-    cursor: not-allowed;
-}
-
-
-/* =====================================================
-   ACHIEVEMENTS
-===================================================== */
-
-.achievements-section {
-    margin-top: 45px;
-}
-
-.achievements-section h2 {
-    margin-bottom: 20px;
-}
-
-#achievementList {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-}
-
-.achievement-card {
-    padding: 18px 20px;
-
-    background: #242424;
-
-    border: 4px solid #444;
-
-    box-shadow: 5px 5px 0 #080808;
-}
-
-.achievement-card h3 {
-    margin: 0 0 8px;
-
-    font-size: 21px;
-}
-
-.achievement-card p {
-    margin: 0;
-
-    color: #bbb;
-}
-
-.achievement-card.unlocked {
-    border-color: #ffd45c;
-}
-
-.achievement-card.locked {
-    opacity: 0.55;
-}
-
-
-/* =====================================================
-   RESET KNOP
-===================================================== */
-
-.save-button {
-    margin-top: 35px;
-
-    padding: 15px 25px;
-
-    background: #333;
-
-    color: white;
-
-    border: 3px solid #555;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.save-button:hover {
-    background: #444;
-}
-
-
-/* =====================================================
-   KLIK EFFECT
-===================================================== */
+/* =========================
+   PIZZA CLICK ANIMATIE
+========================= */
 
 .pizza-click {
-    animation: pizzaClick 0.12s ease;
+    animation: pizza-click 0.12s ease;
 }
 
-@keyframes pizzaClick {
+@keyframes pizza-click {
 
     0% {
         transform: scale(1);
     }
 
     50% {
-        transform: scale(0.94);
+        transform: scale(0.88) rotate(-2deg);
     }
 
     100% {
@@ -599,48 +141,401 @@ body {
 }
 
 
-/* =====================================================
-   🍕 KLIK PARTICLES
-===================================================== */
+/* =========================
+   STATS
+========================= */
 
-.click-particle {
+.stats {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.stat {
+    background: #292929;
+
+    border: 2px solid #484848;
+
+    border-radius: 8px;
+
+    padding: 10px 14px;
+
+    margin: 8px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 17px;
+}
+
+.stat strong {
+    color: #ffd45c;
+}
+
+
+/* =========================
+   COMBO
+========================= */
+
+#combo {
+    color: #ff8a3d;
+
+    font-size: 26px;
+
+    text-shadow:
+        2px 2px 0 #7a3517;
+}
+
+#comboBonus {
+    color: #ffcf4a;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   XP
+========================= */
+
+.xp-container {
+    width: 100%;
+
+    margin-top: 15px;
+}
+
+.xp-text {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+}
+
+.xp-bar {
+    width: 100%;
+    height: 22px;
+
+    background: #111;
+
+    border: 3px solid #555;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+#xpProgress {
+    height: 100%;
+    width: 0%;
+
+    background: linear-gradient(
+        90deg,
+        #45d66b,
+        #b5ff57
+    );
+
+    transition: width 0.25s ease;
+}
+
+
+/* =========================
+   SHOP
+========================= */
+
+.shop {
+    max-height: 650px;
+
+    overflow-y: auto;
+
+    padding-right: 8px;
+}
+
+
+/* scrollbar */
+
+.shop::-webkit-scrollbar {
+    width: 10px;
+}
+
+.shop::-webkit-scrollbar-track {
+    background: #111;
+    border-radius: 10px;
+}
+
+.shop::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 10px;
+}
+
+.shop::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+
+/* =========================
+   UPGRADE CARDS
+========================= */
+
+.upgrade-card {
+    background:
+        linear-gradient(
+            145deg,
+            #303030,
+            #242424
+        );
+
+    border: 3px solid #505050;
+
+    border-radius: 10px;
+
+    padding: 14px;
+
+    margin-bottom: 12px;
+
+    transition:
+        transform 0.12s ease,
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
+}
+
+.upgrade-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #777;
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.35);
+}
+
+.upgrade-card h3 {
+    margin-bottom: 7px;
+
+    color: #ffd45c;
+
+    font-size: 19px;
+}
+
+.upgrade-card p {
+    margin: 5px 0;
+
+    color: #ddd;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 11px 15px;
+
+    border: 3px solid #80631e;
+    border-radius: 8px;
+
+    background: #ffd45c;
+
+    color: #201800;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 0 #8b671d;
+
+    transition:
+        transform 0.08s ease,
+        filter 0.08s ease,
+        box-shadow 0.08s ease;
+}
+
+button:hover {
+    filter: brightness(1.08);
+
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(3px);
+
+    box-shadow:
+        0 1px 0 #8b671d;
+}
+
+button:disabled {
+    background: #555;
+
+    color: #999;
+
+    border-color: #444;
+
+    box-shadow:
+        0 4px 0 #292929;
+
+    cursor: not-allowed;
+
+    filter: none;
+
+    transform: none;
+}
+
+
+/* =========================
+   ACHIEVEMENTS
+========================= */
+
+.achievements {
+    margin-top: 25px;
+}
+
+#achievementList {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+.achievement-item {
+    background: #292929;
+
+    border: 2px solid #444;
+
+    border-radius: 8px;
+
+    padding: 11px;
+
+    min-height: 75px;
+
+    color: #aaa;
+
+    transition:
+        transform 0.12s ease,
+        border-color 0.12s ease;
+}
+
+.achievement-item:hover {
+    transform: translateY(-2px);
+}
+
+.achievement-item strong {
+    color: #ccc;
+}
+
+.achievement-item small {
+    color: #999;
+}
+
+
+/* vrijgespeeld */
+
+.achievement-item.unlocked {
+    background:
+        linear-gradient(
+            145deg,
+            #403719,
+            #292929
+        );
+
+    border-color: #c29b32;
+
+    color: white;
+
+    box-shadow:
+        0 0 12px rgba(255, 212, 92, 0.12);
+}
+
+.achievement-item.unlocked strong {
+    color: #ffd45c;
+}
+
+.achievement-item.unlocked small {
+    color: #ddd;
+}
+
+
+/* =========================
+   ACHIEVEMENT POPUP
+========================= */
+
+.achievement-popup {
     position: fixed;
+
+    left: 50%;
+    top: 25px;
+
+    transform:
+        translate(-50%, -150px);
+
+    opacity: 0;
+
+    z-index: 10000;
+
+    min-width: 280px;
+    max-width: 90vw;
+
+    padding: 15px 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #30280f,
+            #1e1e1e
+        );
+
+    border: 4px solid #ffd45c;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.6);
 
     pointer-events: none;
 
-    font-size: 22px;
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.achievement-popup.show {
+    transform:
+        translate(-50%, 0);
+
+    opacity: 1;
+}
+
+.popup-title {
+    color: #ffd45c;
+
+    font-size: 18px;
 
     font-weight: bold;
 
-    z-index: 9999;
-
-    animation: particle-fly 700ms ease-out forwards;
+    margin-bottom: 5px;
 }
 
-@keyframes particle-fly {
+#popupText {
+    color: white;
 
-    0% {
-        transform:
-            translate(0, 0)
-            scale(1);
-
-        opacity: 1;
-    }
-
-    100% {
-        transform:
-            translate(
-                var(--particle-x),
-                var(--particle-y)
-            )
-            scale(0.5);
-
-        opacity: 0;
-    }
+    font-weight: bold;
 }
-/* =====================================================
-   🍕 PIZZA PARTICLES
-===================================================== */
+
+
+/* =========================
+   CLICK PARTICLES
+========================= */
 
 .click-particle {
     position: fixed;
@@ -658,7 +553,8 @@ body {
 
     z-index: 99999;
 
-    animation: particle-fly 700ms ease-out forwards;
+    animation:
+        particle-fly 700ms ease-out forwards;
 }
 
 @keyframes particle-fly {
@@ -683,139 +579,116 @@ body {
     }
 }
 
-/* =====================================================
-   ACHIEVEMENT POPUP
-===================================================== */
 
-.achievement-popup {
-    position: fixed;
+/* =========================
+   RESET BUTTON
+========================= */
 
-    top: 25px;
-    right: 25px;
+#resetButton {
+    margin-top: 20px;
 
-    width: 300px;
+    background: #a83b3b;
 
-    padding: 20px;
+    color: white;
 
-    background: #111;
+    border-color: #652424;
 
-    border: 4px solid #ffd45c;
-
-    box-shadow: 6px 6px 0 #080808;
-
-    text-align: center;
-
-    transform: translateX(350px);
-
-    transition: transform 0.3s ease;
-
-    z-index: 999;
+    box-shadow:
+        0 4px 0 #571d1d;
 }
 
-.achievement-popup.show {
-    transform: translateX(0);
-}
-
-.popup-title {
-    color: #ffd45c;
-
-    font-size: 22px;
-
-    font-weight: bold;
-
-    margin-bottom: 10px;
+#resetButton:hover {
+    filter: brightness(1.12);
 }
 
 
-/* =====================================================
-   TELEFOON
-===================================================== */
+/* =========================
+   RESPONSIVE
+========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 850px) {
 
-    .game {
+    .game-container {
         grid-template-columns: 1fr;
-    }
 
-    .pizza-area {
-        min-height: auto;
-
-        border-right: none;
-
-        border-bottom: 5px solid #333;
-
-        padding-top: 25px;
+        width: min(700px, 94%);
     }
 
     .shop {
-        min-height: auto;
-
-        padding: 30px 20px 50px;
+        max-height: none;
     }
 
-    .pizza-area h1 {
-        font-size: 34px;
-    }
-
-    .pizza {
-        width: 320px;
-        height: 320px;
-    }
-
-    .upgrade-card {
-        grid-template-columns: 1fr;
-
-        gap: 12px;
-    }
-
-    .upgrade-card button {
-        width: 100%;
-    }
 }
 
 
-/* =====================================================
-   KLEINE TELEFOONS
-===================================================== */
+/* =========================
+   MOBIEL
+========================= */
 
 @media (max-width: 500px) {
 
-    .pizza-area h1 {
-        font-size: 29px;
+    .game-container {
+        width: 96%;
+
+        margin: 12px auto;
+
+        gap: 15px;
     }
 
-    .instruction {
-        font-size: 17px;
+    .panel {
+        padding: 15px;
+
+        border-width: 3px;
+
+        border-radius: 10px;
     }
 
-    .pizza {
-        width: 280px;
-        height: 280px;
-    }
-
-    .pepperoni {
-        width: 40px;
-        height: 40px;
-    }
-
-    .spin-counter {
-        min-width: 230px;
-
-        font-size: 23px;
-    }
-
-    .combo-box,
-    .level-box {
-        width: 300px;
-
-        min-width: 0;
-    }
-
-    .shop h2 {
+    h1 {
         font-size: 30px;
     }
 
-    .pepperoni-count {
-        font-size: 23px;
+    h2 {
+        font-size: 21px;
+    }
+
+    .pizza {
+        width: 70vw;
+        height: 70vw;
+    }
+
+    .stat {
+        font-size: 14px;
+
+        padding: 9px;
+    }
+
+    #achievementList {
+        grid-template-columns: 1fr;
+    }
+
+    .achievement-item {
+        min-height: auto;
+
+        padding: 10px;
+    }
+
+    .upgrade-card {
+        padding: 12px;
+    }
+
+    .upgrade-card h3 {
+        font-size: 17px;
+    }
+
+    button {
+        padding: 12px;
+
+        font-size: 14px;
+    }
+
+    .achievement-popup {
+        min-width: 240px;
+
+        padding: 13px;
     }
 }
