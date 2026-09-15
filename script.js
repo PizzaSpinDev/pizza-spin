@@ -17,10 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 pepperoniPower: 0,
                 bigPizza: 0,
                 fastSpin: 0,
+
                 autoPizza: 0,
                 pizzaRobot: 0,
+                megaRobot: 0,
                 pizzaChef: 0,
                 pizzaFactory: 0,
+                pizzaReactor: 0,
                 pizzaShop: 0,
                 pizzaEmpire: 0,
                 pizzaRocket: 0,
@@ -102,10 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // CRITICAL CLICK
     // =========================
 
-    // 5% kans op een critical click
     const CRITICAL_CHANCE = 0.05;
-
-    // Critical geeft 2x zoveel
     const CRITICAL_MULTIPLIER = 2;
 
 
@@ -117,8 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let comboTimer = null;
 
     const MAX_COMBO = 100;
-
-    // Combo reset na 3 seconden
     const COMBO_TIMEOUT = 3000;
 
 
@@ -155,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!comboElement) {
             return;
         }
+
 
         if (combo >= MAX_COMBO) {
             comboElement.textContent = "MAX!";
@@ -200,8 +199,10 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         const multiplier =
             getComboMultiplier();
+
 
         comboBonusElement.textContent =
             "×" +
@@ -265,11 +266,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         amount +=
+            game.upgrades.megaRobot * 50;
+
+
+        amount +=
             game.upgrades.pizzaChef * 20;
 
 
         amount +=
             game.upgrades.pizzaFactory * 100;
+
+
+        amount +=
+            game.upgrades.pizzaReactor * 250;
 
 
         amount +=
@@ -302,97 +311,119 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const upgrades = [
 
+        // CLICK UPGRADES
         {
             id: "pepperoniPower",
             name: "Pepperoni Power",
-            description: "+1 pepperoni per klik",
+            description: "+1 🍕 per klik",
             baseCost: 10
         },
 
         {
             id: "bigPizza",
             name: "Big Pizza",
-            description: "+2 pepperoni per klik",
+            description: "+2 🍕 per klik",
             baseCost: 50
         },
 
         {
             id: "fastSpin",
             name: "Turbo Click",
-            description: "+5 pepperoni per klik",
+            description: "+5 🍕 per klik",
             baseCost: 150
         },
 
+
+        // AUTO UPGRADES
         {
             id: "autoPizza",
             name: "Auto Pizza",
-            description: "+1 pepperoni per seconde",
+            description: "+1 🍕 per seconde",
             baseCost: 100
         },
 
         {
             id: "pizzaRobot",
             name: "Pizza Robot",
-            description: "+5 pepperoni per seconde",
+            description: "+5 🍕 per seconde",
             baseCost: 500
+        },
+
+        {
+            id: "megaRobot",
+            name: "Mega Robot",
+            description: "+50 🍕 per seconde",
+            baseCost: 5000
         },
 
         {
             id: "pizzaChef",
             name: "Pizza Chef",
-            description: "+20 pepperoni per seconde",
+            description: "+20 🍕 per seconde",
             baseCost: 2000
         },
 
         {
             id: "pizzaFactory",
             name: "Pizza Factory",
-            description: "+100 pepperoni per seconde",
+            description: "+100 🍕 per seconde",
             baseCost: 10000
+        },
+
+        {
+            id: "pizzaReactor",
+            name: "Pizza Reactor",
+            description: "+250 🍕 per seconde",
+            baseCost: 25000
         },
 
         {
             id: "pizzaShop",
             name: "Pizza Shop",
-            description: "+500 pepperoni per seconde",
+            description: "+500 🍕 per seconde",
             baseCost: 50000
         },
 
         {
             id: "pizzaEmpire",
             name: "Pizza Empire",
-            description: "+2.500 pepperoni per seconde",
+            description: "+2.500 🍕 per seconde",
             baseCost: 250000
         },
 
         {
             id: "pizzaRocket",
             name: "Pizza Rocket",
-            description: "+10.000 pepperoni per seconde",
+            description: "+10.000 🍕 per seconde",
             baseCost: 1000000
         },
 
         {
             id: "spacePizza",
             name: "Space Pizza",
-            description: "+50.000 pepperoni per seconde",
+            description: "+50.000 🍕 per seconde",
             baseCost: 5000000
         },
 
         {
             id: "pizzaGod",
             name: "Pizza God",
-            description: "+250.000 pepperoni per seconde",
+            description: "+250.000 🍕 per seconde",
             baseCost: 25000000
         }
 
     ];
 
 
+    // =========================
+    // UPGRADE PRIJS
+    // =========================
+
     function getUpgradeCost(upgrade) {
 
         const level =
             game.upgrades[upgrade.id];
+
 
         return Math.floor(
             upgrade.baseCost *
@@ -400,6 +431,10 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
+
+    // =========================
+    // UPGRADE KOPEN
+    // =========================
 
     function buyUpgrade(upgrade) {
 
@@ -422,6 +457,10 @@ document.addEventListener("DOMContentLoaded", function () {
         updateGame();
     }
 
+
+    // =========================
+    // UPGRADES WEERGEVEN
+    // =========================
 
     function renderUpgrades() {
 
@@ -456,7 +495,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <p>${upgrade.description}</p>
 
-                <p>Level: ${level}</p>
+                <p>
+                    Level: ${level}
+                </p>
 
                 <button>
                     🍕 ${formatNumber(cost)}
@@ -466,6 +507,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const button =
                 card.querySelector("button");
+
+
+            // Knop uitschakelen als speler te weinig heeft
+            if (game.pepperoni < cost) {
+                button.disabled = true;
+            }
 
 
             button.addEventListener(
@@ -658,10 +705,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // ACHIEVEMENTS CHECKEN
-    // =========================
-
     function checkAchievements() {
 
         const checks = {
@@ -802,7 +845,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // CLICK PARTICLES
     // =========================
 
-    function createClickParticles(isCritical = false) {
+    function createClickParticles(
+        isCritical = false
+    ) {
 
         if (!pizza) {
             return;
@@ -846,7 +891,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Critical = extra particles
         if (isCritical) {
             particleAmount = 20;
         }
@@ -902,20 +946,16 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            // Critical particles zijn groter
             if (isCritical) {
 
                 particle.style.width =
                     "20px";
 
-
                 particle.style.height =
                     "20px";
 
-
                 particle.style.background =
                     "#ff7b00";
-
 
                 particle.style.border =
                     "3px solid #ff3d00";
@@ -1084,25 +1124,16 @@ document.addEventListener("DOMContentLoaded", function () {
             "click",
             function () {
 
-                // -------------------------
-                // 1. COMBO
-                // -------------------------
-
+                // Combo
                 increaseCombo();
 
 
-                // -------------------------
-                // 2. BASIS OPBRENGST
-                // -------------------------
-
+                // Basis
                 const baseAmount =
                     getPerClick();
 
 
-                // -------------------------
-                // 3. COMBO BONUS
-                // -------------------------
-
+                // Combo
                 const comboMultiplier =
                     getComboMultiplier();
 
@@ -1114,10 +1145,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                // -------------------------
-                // 4. CRITICAL CHECK
-                // -------------------------
-
+                // Critical
                 const isCritical =
                     Math.random() <
                     CRITICAL_CHANCE;
@@ -1126,10 +1154,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 let amount =
                     normalAmount;
 
-
-                // -------------------------
-                // 5. CRITICAL BONUS
-                // -------------------------
 
                 if (isCritical) {
 
@@ -1141,41 +1165,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // -------------------------
-                // 6. PEPPERONI
-                // -------------------------
-
+                // Pepperoni
                 game.pepperoni +=
                     amount;
 
 
-                // -------------------------
-                // 7. KLIK TELLEN
-                // -------------------------
-
+                // Klikken
                 game.spins++;
 
 
-                // -------------------------
-                // 8. XP
-                // -------------------------
-
+                // XP
                 addXP(5);
 
 
-                // -------------------------
-                // 9. PARTICLES
-                // -------------------------
-
+                // Particles
                 createClickParticles(
                     isCritical
                 );
 
 
-                // -------------------------
-                // 10. CRITICAL POPUP
-                // -------------------------
-
+                // Critical popup
                 if (isCritical) {
 
                     showCriticalClick(
@@ -1184,10 +1193,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // -------------------------
-                // 11. PIZZA ANIMATIE
-                // -------------------------
-
+                // Pizza animatie
                 pizza.classList.remove(
                     "pizza-click"
                 );
@@ -1200,10 +1206,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     "pizza-click"
                 );
 
-
-                // -------------------------
-                // 12. UPDATE
-                // -------------------------
 
                 updateGame();
 
