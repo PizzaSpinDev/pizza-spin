@@ -36,12 +36,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 hundredSpins: false,
                 thousandSpins: false,
                 tenThousandSpins: false,
+
                 millionPepperoni: false,
                 tenMillionPepperoni: false,
+
                 tenPerSecond: false,
                 hundredPerSecond: false,
                 thousandPerSecond: false,
-                levelTen: false
+
+                levelTen: false,
+
+                criticalClick: false,
+                combo10: false,
+                combo50: false,
+                combo100: false,
+
+                hundredThousandSpins: false,
+                hundredMillionPepperoni: false,
+
+                megaRobot: false,
+                megaRobotLevel10: false,
+
+                pizzaReactor: false,
+
+                level25: false
             }
         };
     }
@@ -53,7 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // HTML ELEMENTEN
     // =========================
 
-    const pizza = document.getElementById("pizza");
+    const pizza =
+        document.getElementById("pizza");
 
     const pepperoniElement =
         document.getElementById("pepperoni");
@@ -128,6 +147,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateComboDisplay();
         updateComboBonusDisplay();
+
+        checkAchievements();
 
 
         if (comboTimer !== null) {
@@ -224,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // PEPPERONI PER CLICK
+    // PER CLICK
     // =========================
 
     function getPerClick() {
@@ -249,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // PEPPERONI PER SECOND
+    // PER SECOND
     // =========================
 
     function getPerSecond() {
@@ -311,7 +332,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const upgrades = [
 
-        // CLICK UPGRADES
         {
             id: "pepperoniPower",
             name: "Pepperoni Power",
@@ -333,8 +353,6 @@ document.addEventListener("DOMContentLoaded", function () {
             baseCost: 150
         },
 
-
-        // AUTO UPGRADES
         {
             id: "autoPizza",
             name: "Auto Pizza",
@@ -415,10 +433,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
 
-    // =========================
-    // UPGRADE PRIJS
-    // =========================
-
     function getUpgradeCost(upgrade) {
 
         const level =
@@ -431,10 +445,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-
-    // =========================
-    // UPGRADE KOPEN
-    // =========================
 
     function buyUpgrade(upgrade) {
 
@@ -454,13 +464,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         saveGame();
 
+        checkAchievements();
+
         updateGame();
     }
 
-
-    // =========================
-    // UPGRADES WEERGEVEN
-    // =========================
 
     function renderUpgrades() {
 
@@ -495,9 +503,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <p>${upgrade.description}</p>
 
-                <p>
-                    Level: ${level}
-                </p>
+                <p>Level: ${level}</p>
 
                 <button>
                     🍕 ${formatNumber(cost)}
@@ -509,7 +515,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 card.querySelector("button");
 
 
-            // Knop uitschakelen als speler te weinig heeft
             if (game.pepperoni < cost) {
                 button.disabled = true;
             }
@@ -572,21 +577,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         if (levelElement) {
-
             levelElement.textContent =
                 game.level;
         }
 
 
         if (xpElement) {
-
             xpElement.textContent =
                 formatNumber(game.xp);
         }
 
 
         if (xpNeededElement) {
-
             xpNeededElement.textContent =
                 formatNumber(needed);
         }
@@ -608,7 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // ACHIEVEMENTS
+    // ACHIEVEMENTS V2
     // =========================
 
     const achievements = [
@@ -638,43 +640,107 @@ document.addEventListener("DOMContentLoaded", function () {
         },
 
         {
+            id: "hundredThousandSpins",
+            name: "Clicker Monster",
+            description: "Klik 100.000 keer"
+        },
+
+        {
             id: "millionPepperoni",
             name: "Miljonair",
-            description: "Verdien 1.000.000 pepperoni"
+            description: "Heb 1.000.000 🍕"
         },
 
         {
             id: "tenMillionPepperoni",
             name: "Pizza Tycoon",
-            description: "Verdien 10.000.000 pepperoni"
+            description: "Heb 10.000.000 🍕"
+        },
+
+        {
+            id: "hundredMillionPepperoni",
+            name: "Pizza Billionaire",
+            description: "Heb 100.000.000 🍕"
         },
 
         {
             id: "tenPerSecond",
             name: "Snelle pizza",
-            description: "Verdien 10 per seconde"
+            description: "Verdien 10 🍕 per seconde"
         },
 
         {
             id: "hundredPerSecond",
             name: "Pizza machine",
-            description: "Verdien 100 per seconde"
+            description: "Verdien 100 🍕 per seconde"
         },
 
         {
             id: "thousandPerSecond",
             name: "Pizza fabriek",
-            description: "Verdien 1.000 per seconde"
+            description: "Verdien 1.000 🍕 per seconde"
+        },
+
+        {
+            id: "criticalClick",
+            name: "💥 Critical!",
+            description: "Krijg je eerste Critical Click"
+        },
+
+        {
+            id: "combo10",
+            name: "🔥 Combo Starter",
+            description: "Bereik combo ×1,10"
+        },
+
+        {
+            id: "combo50",
+            name: "🔥 Combo Master",
+            description: "Bereik combo ×1,50"
+        },
+
+        {
+            id: "combo100",
+            name: "👑 Combo God",
+            description: "Bereik combo ×2,00"
+        },
+
+        {
+            id: "megaRobot",
+            name: "🤖 Robot Army",
+            description: "Koop je eerste Mega Robot"
+        },
+
+        {
+            id: "megaRobotLevel10",
+            name: "🤖 Robot Overlord",
+            description: "Bereik Mega Robot level 10"
+        },
+
+        {
+            id: "pizzaReactor",
+            name: "⚛️ Reactor Online",
+            description: "Koop je eerste Pizza Reactor"
         },
 
         {
             id: "levelTen",
-            name: "Level 10",
+            name: "⭐ Level 10",
             description: "Bereik level 10"
+        },
+
+        {
+            id: "level25",
+            name: "🌟 Level Master",
+            description: "Bereik level 25"
         }
 
     ];
 
+
+    // =========================
+    // POPUP
+    // =========================
 
     function showAchievementPopup(text) {
 
@@ -705,6 +771,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // =========================
+    // ACHIEVEMENTS CHECKEN
+    // =========================
+
     function checkAchievements() {
 
         const checks = {
@@ -721,11 +791,17 @@ document.addEventListener("DOMContentLoaded", function () {
             tenThousandSpins:
                 game.spins >= 10000,
 
+            hundredThousandSpins:
+                game.spins >= 100000,
+
             millionPepperoni:
                 game.pepperoni >= 1000000,
 
             tenMillionPepperoni:
                 game.pepperoni >= 10000000,
+
+            hundredMillionPepperoni:
+                game.pepperoni >= 100000000,
 
             tenPerSecond:
                 getPerSecond() >= 10,
@@ -736,9 +812,32 @@ document.addEventListener("DOMContentLoaded", function () {
             thousandPerSecond:
                 getPerSecond() >= 1000,
 
-            levelTen:
-                game.level >= 10
+            criticalClick:
+                false,
 
+            combo10:
+                combo >= 10,
+
+            combo50:
+                combo >= 50,
+
+            combo100:
+                combo >= 100,
+
+            megaRobot:
+                game.upgrades.megaRobot >= 1,
+
+            megaRobotLevel10:
+                game.upgrades.megaRobot >= 10,
+
+            pizzaReactor:
+                game.upgrades.pizzaReactor >= 1,
+
+            levelTen:
+                game.level >= 10,
+
+            level25:
+                game.level >= 25
         };
 
 
@@ -761,6 +860,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         "🏆 " +
                         achievement.name
                     );
+
+
+                    saveGame();
                 }
 
             }
@@ -990,6 +1092,19 @@ document.addEventListener("DOMContentLoaded", function () {
             formatNumber(amount) +
             " 🍕"
         );
+
+
+        if (
+            !game.achievements.criticalClick
+        ) {
+
+            game.achievements.criticalClick =
+                true;
+
+            saveGame();
+
+            renderAchievements();
+        }
     }
 
 
@@ -1128,12 +1243,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 increaseCombo();
 
 
-                // Basis
+                // Basis opbrengst
                 const baseAmount =
                     getPerClick();
 
 
-                // Combo
+                // Combo multiplier
                 const comboMultiplier =
                     getComboMultiplier();
 
@@ -1170,7 +1285,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     amount;
 
 
-                // Klikken
+                // Klik tellen
                 game.spins++;
 
 
@@ -1233,6 +1348,8 @@ document.addEventListener("DOMContentLoaded", function () {
             game.pepperoni +=
                 perSecond;
 
+
+            checkAchievements();
 
             updateGame();
 
