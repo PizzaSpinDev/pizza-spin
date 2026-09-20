@@ -1,694 +1,208 @@
-* {
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="nl">
 
-body {
-    margin: 0;
-    min-height: 100vh;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    font-family: "Courier New", monospace;
+    <title>Pizza Spin</title>
 
-    background:
-        radial-gradient(circle at top, #3a3a3a 0%, #171717 55%, #0b0b0b 100%);
+    <link rel="stylesheet" href="style.css">
+</head>
 
-    color: white;
+<body>
 
-    overflow-x: hidden;
-}
+    <div class="game">
 
+        <!-- =========================
+             🍕 PIZZA GEDEELTE
+        ========================== -->
 
-/* =========================
-   HOOFD CONTAINER
-========================= */
+        <div class="pizza-area" id="pizzaArea">
 
-.game-container {
-    width: min(1200px, 94%);
-    margin: 30px auto;
+            <h1>🍕 PIZZA SPIN</h1>
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-}
+            <div class="instruction">
 
+                <div>
+                    🖱️ <strong>Computer:</strong>
+                    klik op de pizza
+                </div>
 
-/* =========================
-   ALGEMENE PANELEN
-========================= */
+                <div>
+                    📱 <strong>Telefoon:</strong>
+                    tik op de pizza
+                </div>
 
-.panel {
-    background: #202020;
+            </div>
 
-    border: 4px solid #555;
-    border-radius: 14px;
 
-    padding: 25px;
+            <!-- PIZZA -->
 
-    box-shadow:
-        0 8px 0 #0b0b0b,
-        0 15px 30px rgba(0, 0, 0, 0.45);
-}
+            <div class="pizza" id="pizza">
 
+                <div class="crust"></div>
 
-/* =========================
-   TITELS
-========================= */
+                <div class="cheese"></div>
 
-h1,
-h2,
-h3 {
-    margin-top: 0;
-}
+                <div class="pepperoni p1"></div>
+                <div class="pepperoni p2"></div>
+                <div class="pepperoni p3"></div>
+                <div class="pepperoni p4"></div>
+                <div class="pepperoni p5"></div>
+                <div class="pepperoni p6"></div>
+                <div class="pepperoni p7"></div>
+                <div class="pepperoni p8"></div>
 
-h1 {
-    text-align: center;
+            </div>
 
-    font-size: clamp(28px, 5vw, 50px);
 
-    color: #ffd45c;
+            <!-- KLIKKEN -->
 
-    text-shadow:
-        4px 4px 0 #8b671d;
-}
+            <div class="spin-counter">
 
-h2 {
-    color: #ffd45c;
+                🖱️ Klikken:
+                <span id="spins">0</span>
 
-    border-bottom: 3px solid #444;
+            </div>
 
-    padding-bottom: 10px;
-}
 
+            <!-- COMBO -->
 
-/* =========================
-   PIZZA GEDEELTE
-========================= */
+            <div class="combo-box" id="comboBox">
 
-.pizza-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+                🔥 Combo:
+                <span id="combo">0</span>
 
-    text-align: center;
-}
+            </div>
 
-.pizza {
-    width: min(320px, 75vw);
-    height: min(320px, 75vw);
 
-    object-fit: contain;
+            <!-- LEVEL -->
 
-    cursor: pointer;
+            <div class="level-box">
 
-    user-select: none;
-    -webkit-user-drag: none;
+                <div class="level-title">
 
-    transition:
-        transform 0.08s ease,
-        filter 0.15s ease;
-}
+                    ⭐ Level:
+                    <span id="level">1</span>
 
-.pizza:hover {
-    transform: scale(1.04);
-}
+                </div>
 
-.pizza:active {
-    transform: scale(0.92);
-    filter: brightness(1.2);
-}
 
+                <div class="xp-bar">
 
-/* =========================
-   PIZZA CLICK ANIMATIE
-========================= */
+                    <div
+                        class="xp-progress"
+                        id="xpProgress">
+                    </div>
 
-.pizza-click {
-    animation: pizza-click 0.12s ease;
-}
+                </div>
 
-@keyframes pizza-click {
 
-    0% {
-        transform: scale(1);
-    }
+                <p>
 
-    50% {
-        transform: scale(0.88) rotate(-2deg);
-    }
+                    XP:
+                    <span id="xp">0</span>
+                    /
+                    <span id="xpNeeded">100</span>
 
-    100% {
-        transform: scale(1);
-    }
-}
+                </p>
 
+            </div>
 
-/* =========================
-   STATS
-========================= */
+        </div>
 
-.stats {
-    width: 100%;
-    margin-top: 15px;
-}
 
-.stat {
-    background: #292929;
+        <!-- =========================
+             🛒 SHOP
+        ========================== -->
 
-    border: 2px solid #484848;
+        <div class="shop">
 
-    border-radius: 8px;
+            <h2>🛒 UPGRADES</h2>
 
-    padding: 10px 14px;
 
-    margin: 8px 0;
+            <div class="pepperoni-count">
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+                🍕 Pepperoni:
+                <span id="pepperoni">0</span>
 
-    font-size: 17px;
-}
+            </div>
 
-.stat strong {
-    color: #ffd45c;
-}
 
+            <div class="production">
 
-/* =========================
-   COMBO
-========================= */
+                🖱️ Per klik:
+                <span id="perSpin">1</span>
 
-#combo {
-    color: #ff8a3d;
+                <br>
 
-    font-size: 26px;
+                🤖 Per seconde:
+                <span id="perSecond">0</span>
 
-    text-shadow:
-        2px 2px 0 #7a3517;
-}
+                <br>
 
-#comboBonus {
-    color: #ffcf4a;
+                🔥 Combo bonus:
+                <span id="comboBonus">×1,00</span>
 
-    font-weight: bold;
-}
+            </div>
 
 
-/* =========================
-   XP
-========================= */
+            <div id="upgradeList"></div>
 
-.xp-container {
-    width: 100%;
 
-    margin-top: 15px;
-}
+            <!-- ACHIEVEMENTS -->
 
-.xp-text {
-    display: flex;
-    justify-content: space-between;
+            <div class="achievements-section">
 
-    margin-bottom: 7px;
+                <h2>🏆 ACHIEVEMENTS</h2>
 
-    font-size: 14px;
-}
+                <div id="achievementList"></div>
 
-.xp-bar {
-    width: 100%;
-    height: 22px;
+            </div>
 
-    background: #111;
 
-    border: 3px solid #555;
+            <!-- RESET -->
 
-    border-radius: 8px;
+            <button
+                class="save-button"
+                id="resetButton">
 
-    overflow: hidden;
-}
+                🗑️ Reset Game
 
-#xpProgress {
-    height: 100%;
-    width: 0%;
+            </button>
 
-    background: linear-gradient(
-        90deg,
-        #45d66b,
-        #b5ff57
-    );
+        </div>
 
-    transition: width 0.25s ease;
-}
+    </div>
 
 
-/* =========================
-   SHOP
-========================= */
+    <!-- =========================
+         🏆 ACHIEVEMENT POPUP
+    ========================== -->
 
-.shop {
-    max-height: 650px;
+    <div
+        id="achievementPopup"
+        class="achievement-popup">
 
-    overflow-y: auto;
+        <div class="popup-title">
 
-    padding-right: 8px;
-}
+            🏆 ACHIEVEMENT!
 
+        </div>
 
-/* scrollbar */
 
-.shop::-webkit-scrollbar {
-    width: 10px;
-}
+        <div id="popupText">
 
-.shop::-webkit-scrollbar-track {
-    background: #111;
-    border-radius: 10px;
-}
+            Achievement gehaald!
 
-.shop::-webkit-scrollbar-thumb {
-    background: #666;
-    border-radius: 10px;
-}
+        </div>
 
-.shop::-webkit-scrollbar-thumb:hover {
-    background: #888;
-}
+    </div>
 
 
-/* =========================
-   UPGRADE CARDS
-========================= */
+    <script src="script.js"></script>
 
-.upgrade-card {
-    background:
-        linear-gradient(
-            145deg,
-            #303030,
-            #242424
-        );
+</body>
 
-    border: 3px solid #505050;
-
-    border-radius: 10px;
-
-    padding: 14px;
-
-    margin-bottom: 12px;
-
-    transition:
-        transform 0.12s ease,
-        border-color 0.12s ease,
-        box-shadow 0.12s ease;
-}
-
-.upgrade-card:hover {
-    transform: translateY(-2px);
-
-    border-color: #777;
-
-    box-shadow:
-        0 5px 12px rgba(0, 0, 0, 0.35);
-}
-
-.upgrade-card h3 {
-    margin-bottom: 7px;
-
-    color: #ffd45c;
-
-    font-size: 19px;
-}
-
-.upgrade-card p {
-    margin: 5px 0;
-
-    color: #ddd;
-
-    font-size: 14px;
-}
-
-
-/* =========================
-   BUTTONS
-========================= */
-
-button {
-    width: 100%;
-
-    margin-top: 10px;
-
-    padding: 11px 15px;
-
-    border: 3px solid #80631e;
-    border-radius: 8px;
-
-    background: #ffd45c;
-
-    color: #201800;
-
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 4px 0 #8b671d;
-
-    transition:
-        transform 0.08s ease,
-        filter 0.08s ease,
-        box-shadow 0.08s ease;
-}
-
-button:hover {
-    filter: brightness(1.08);
-
-    transform: translateY(-1px);
-}
-
-button:active {
-    transform: translateY(3px);
-
-    box-shadow:
-        0 1px 0 #8b671d;
-}
-
-button:disabled {
-    background: #555;
-
-    color: #999;
-
-    border-color: #444;
-
-    box-shadow:
-        0 4px 0 #292929;
-
-    cursor: not-allowed;
-
-    filter: none;
-
-    transform: none;
-}
-
-
-/* =========================
-   ACHIEVEMENTS
-========================= */
-
-.achievements {
-    margin-top: 25px;
-}
-
-#achievementList {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 10px;
-}
-
-.achievement-item {
-    background: #292929;
-
-    border: 2px solid #444;
-
-    border-radius: 8px;
-
-    padding: 11px;
-
-    min-height: 75px;
-
-    color: #aaa;
-
-    transition:
-        transform 0.12s ease,
-        border-color 0.12s ease;
-}
-
-.achievement-item:hover {
-    transform: translateY(-2px);
-}
-
-.achievement-item strong {
-    color: #ccc;
-}
-
-.achievement-item small {
-    color: #999;
-}
-
-
-/* vrijgespeeld */
-
-.achievement-item.unlocked {
-    background:
-        linear-gradient(
-            145deg,
-            #403719,
-            #292929
-        );
-
-    border-color: #c29b32;
-
-    color: white;
-
-    box-shadow:
-        0 0 12px rgba(255, 212, 92, 0.12);
-}
-
-.achievement-item.unlocked strong {
-    color: #ffd45c;
-}
-
-.achievement-item.unlocked small {
-    color: #ddd;
-}
-
-
-/* =========================
-   ACHIEVEMENT POPUP
-========================= */
-
-.achievement-popup {
-    position: fixed;
-
-    left: 50%;
-    top: 25px;
-
-    transform:
-        translate(-50%, -150px);
-
-    opacity: 0;
-
-    z-index: 10000;
-
-    min-width: 280px;
-    max-width: 90vw;
-
-    padding: 15px 20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #30280f,
-            #1e1e1e
-        );
-
-    border: 4px solid #ffd45c;
-
-    border-radius: 12px;
-
-    text-align: center;
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.6);
-
-    pointer-events: none;
-
-    transition:
-        transform 0.25s ease,
-        opacity 0.25s ease;
-}
-
-.achievement-popup.show {
-    transform:
-        translate(-50%, 0);
-
-    opacity: 1;
-}
-
-.popup-title {
-    color: #ffd45c;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    margin-bottom: 5px;
-}
-
-#popupText {
-    color: white;
-
-    font-weight: bold;
-}
-
-
-/* =========================
-   CLICK PARTICLES
-========================= */
-
-.click-particle {
-    position: fixed;
-
-    width: 14px;
-    height: 14px;
-
-    background: #ffd45c;
-
-    border: 3px solid #9b7b25;
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    z-index: 99999;
-
-    animation:
-        particle-fly 700ms ease-out forwards;
-}
-
-@keyframes particle-fly {
-
-    0% {
-        transform:
-            translate(-50%, -50%)
-            scale(1);
-
-        opacity: 1;
-    }
-
-    100% {
-        transform:
-            translate(
-                calc(-50% + var(--particle-x)),
-                calc(-50% + var(--particle-y))
-            )
-            scale(0);
-
-        opacity: 0;
-    }
-}
-
-
-/* =========================
-   RESET BUTTON
-========================= */
-
-#resetButton {
-    margin-top: 20px;
-
-    background: #a83b3b;
-
-    color: white;
-
-    border-color: #652424;
-
-    box-shadow:
-        0 4px 0 #571d1d;
-}
-
-#resetButton:hover {
-    filter: brightness(1.12);
-}
-
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 850px) {
-
-    .game-container {
-        grid-template-columns: 1fr;
-
-        width: min(700px, 94%);
-    }
-
-    .shop {
-        max-height: none;
-    }
-
-}
-
-
-/* =========================
-   MOBIEL
-========================= */
-
-@media (max-width: 500px) {
-
-    .game-container {
-        width: 96%;
-
-        margin: 12px auto;
-
-        gap: 15px;
-    }
-
-    .panel {
-        padding: 15px;
-
-        border-width: 3px;
-
-        border-radius: 10px;
-    }
-
-    h1 {
-        font-size: 30px;
-    }
-
-    h2 {
-        font-size: 21px;
-    }
-
-    .pizza {
-        width: 70vw;
-        height: 70vw;
-    }
-
-    .stat {
-        font-size: 14px;
-
-        padding: 9px;
-    }
-
-    #achievementList {
-        grid-template-columns: 1fr;
-    }
-
-    .achievement-item {
-        min-height: auto;
-
-        padding: 10px;
-    }
-
-    .upgrade-card {
-        padding: 12px;
-    }
-
-    .upgrade-card h3 {
-        font-size: 17px;
-    }
-
-    button {
-        padding: 12px;
-
-        font-size: 14px;
-    }
-
-    .achievement-popup {
-        min-width: 240px;
-
-        padding: 13px;
-    }
-}
+</html>
