@@ -132,57 +132,120 @@ document.addEventListener("DOMContentLoaded", function () {
     // COMBO
     // =========================
 
-    let combo = 0;
-    let comboTimer = null;
+let combo = 0;
+let comboTimer = null;
+let lastComboMultiplier = 1;
 
-    const MAX_COMBO = 100;
-    const COMBO_TIMEOUT = 3000;
+const MAX_COMBO = 100;
+const COMBO_TIMEOUT = 3000;
 
 
-    function increaseCombo() {
+  function increaseCombo() {
 
-        if (combo < MAX_COMBO) {
-            combo++;
-        }
+    if (combo < MAX_COMBO) {
+        combo++;
+    }
+
+    const newMultiplier = getComboMultiplier();
+
+    updateComboDisplay();
+    updateComboBonusDisplay();
+
+    checkAchievements();
+
+    // Alleen effect wanneer je een nieuwe combo-mijlpaal bereikt
+    if (newMultiplier !== lastComboMultiplier) {
+
+        showComboMilestone(newMultiplier);
+
+        lastComboMultiplier = newMultiplier;
+    }
+
+    if (comboTimer !== null) {
+        clearTimeout(comboTimer);
+    }
+
+    comboTimer = setTimeout(function () {
+
+        combo = 0;
+
+        lastComboMultiplier = 1;
 
         updateComboDisplay();
         updateComboBonusDisplay();
 
-        checkAchievements();
+        comboTimer = null;
 
+    }, COMBO_TIMEOUT);
+}
+    function showComboMilestone(multiplier) {
 
-        if (comboTimer !== null) {
-            clearTimeout(comboTimer);
-        }
+    let text = "";
+    let className = "";
 
+    if (multiplier >= 2) {
 
-        comboTimer = setTimeout(function () {
+        text = "👑 MAX COMBO! ×2,00";
 
-            combo = 0;
+        className = "combo-max";
 
-            updateComboDisplay();
-            updateComboBonusDisplay();
+    } else if (multiplier >= 1.75) {
 
-            comboTimer = null;
+        text = "🔥 INSANE COMBO! ×1,75";
 
-        }, COMBO_TIMEOUT);
+        className = "combo-insane";
+
+    } else if (multiplier >= 1.50) {
+
+        text = "🔥 GREAT COMBO! ×1,50";
+
+        className = "combo-great";
+
+    } else if (multiplier >= 1.25) {
+
+        text = "🔥 COMBO! ×1,25";
+
+        className = "combo-good";
+
+    } else if (multiplier >= 1.10) {
+
+        text = "🔥 COMBO START! ×1,10";
+
+        className = "combo-start";
+
     }
 
-
-    function updateComboDisplay() {
-
-        if (!comboElement) {
-            return;
-        }
-
-
-        if (combo >= MAX_COMBO) {
-            comboElement.textContent = "MAX!";
-        } else {
-            comboElement.textContent = combo;
-        }
+    if (!text) {
+        return;
     }
 
+    const popup = document.createElement("div");
+
+    popup.className =
+        "combo-milestone " + className;
+
+    popup.textContent = text;
+
+    document.body.appendChild(popup);
+
+    setTimeout(function () {
+
+        popup.classList.add("show");
+
+    }, 10);
+
+    setTimeout(function () {
+
+        popup.classList.remove("show");
+
+    }, 850);
+
+    setTimeout(function () {
+
+        popup.remove();
+
+    }, 1100);
+}
 
     // =========================
     // COMBO BONUS
