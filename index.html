@@ -3,34 +3,46 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Pizza Spin</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
+
 
 <body>
 
     <div class="game">
 
-        <!-- =========================
-             🍕 PIZZA GEDEELTE
-        ========================== -->
 
-        <div class="pizza-area" id="pizzaArea">
+        <!-- =====================================
+             LINKERKANT
+        ====================================== -->
+
+        <div class="pizza-area">
 
             <h1>🍕 PIZZA SPIN</h1>
+
 
             <div class="instruction">
 
                 <div>
-                    🖱️ <strong>Computer:</strong>
+                    🖱️
+                    <strong>Computer:</strong>
                     klik op de pizza
                 </div>
 
                 <div>
-                    📱 <strong>Telefoon:</strong>
+                    📱
+                    <strong>Telefoon:</strong>
                     tik op de pizza
                 </div>
 
@@ -39,11 +51,15 @@
 
             <!-- PIZZA -->
 
-            <div class="pizza" id="pizza">
+            <div
+                class="pizza"
+                id="pizza"
+            >
 
                 <div class="crust"></div>
 
                 <div class="cheese"></div>
+
 
                 <div class="pepperoni p1"></div>
                 <div class="pepperoni p2"></div>
@@ -69,7 +85,10 @@
 
             <!-- COMBO -->
 
-            <div class="combo-box" id="comboBox">
+            <div
+                class="combo-box"
+                id="comboBox"
+            >
 
                 🔥 Combo:
                 <span id="combo">0</span>
@@ -93,8 +112,8 @@
 
                     <div
                         class="xp-progress"
-                        id="xpProgress">
-                    </div>
+                        id="xpProgress"
+                    ></div>
 
                 </div>
 
@@ -113,11 +132,15 @@
         </div>
 
 
-        <!-- =========================
-             🛒 SHOP
-        ========================== -->
+
+        <!-- =====================================
+             RECHTERKANT
+        ====================================== -->
 
         <div class="shop">
+
+
+            <!-- UPGRADES -->
 
             <h2>🛒 UPGRADES</h2>
 
@@ -137,10 +160,12 @@
 
                 <br>
 
+
                 🤖 Per seconde:
                 <span id="perSecond">0</span>
 
                 <br>
+
 
                 🔥 Combo bonus:
                 <span id="comboBonus">×1,00</span>
@@ -148,10 +173,15 @@
             </div>
 
 
+            <!-- DIT WAS HET BELANGRIJKE STUK -->
+
             <div id="upgradeList"></div>
 
 
-            <!-- ACHIEVEMENTS -->
+
+            <!-- =================================
+                 ACHIEVEMENTS
+            ================================== -->
 
             <div class="achievements-section">
 
@@ -166,7 +196,8 @@
 
             <button
                 class="save-button"
-                id="resetButton">
+                id="resetButton"
+            >
 
                 🗑️ Reset Game
 
@@ -177,13 +208,15 @@
     </div>
 
 
-    <!-- =========================
-         🏆 ACHIEVEMENT POPUP
-    ========================== -->
+
+    <!-- =====================================
+         ACHIEVEMENT POPUP
+    ====================================== -->
 
     <div
         id="achievementPopup"
-        class="achievement-popup">
+        class="achievement-popup"
+    >
 
         <div class="popup-title">
 
@@ -200,6 +233,9 @@
 
     </div>
 
+
+
+    <!-- JAVASCRIPT -->
 
     <script src="script.js"></script>
 
