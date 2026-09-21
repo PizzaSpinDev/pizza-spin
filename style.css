@@ -372,13 +372,10 @@ body {
     gap: 12px;
 }
 
-.upgrade {
+.upgrade-card {
     background: #252525;
-
     padding: 15px;
-
     border-radius: 12px;
-
     border: 2px solid #444;
 
     transition:
@@ -386,22 +383,22 @@ body {
         border-color 0.15s ease;
 }
 
-.upgrade:hover {
+.upgrade-card:hover {
     transform: translateY(-2px);
     border-color: #ffd45c;
 }
 
-.upgrade h3 {
+.upgrade-card h3 {
     margin: 0 0 7px;
     color: #ffd45c;
 }
 
-.upgrade p {
+.upgrade-card p {
     margin: 5px 0;
     color: #ccc;
 }
 
-.upgrade button {
+.upgrade-button {
     width: 100%;
 
     margin-top: 10px;
@@ -423,22 +420,21 @@ body {
         background 0.1s ease;
 }
 
-.upgrade button:hover {
+.upgrade-button:hover {
     background: #ffb45c;
     transform: scale(1.02);
 }
 
-.upgrade button:active {
+.upgrade-button:active {
     transform: scale(0.97);
 }
 
-.upgrade button:disabled {
+.upgrade-button:disabled {
     background: #555;
     color: #999;
     cursor: not-allowed;
     transform: none;
 }
-
 
 /* =========================
    ACHIEVEMENTS
