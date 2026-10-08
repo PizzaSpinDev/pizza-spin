@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =========================
+    // =========================================================
     // OPSLAAN
-    // =========================
+    // =========================================================
 
     const SAVE_KEY = "pizzaSpinSave";
 
+
     function createNewGame() {
+
         return {
             pepperoni: 0,
             spins: 0,
@@ -47,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 levelTen: false,
 
                 criticalClick: false,
+
                 combo10: false,
                 combo50: false,
                 combo100: false,
@@ -64,15 +67,15 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
+
     let game = createNewGame();
 
 
-    // =========================
+    // =========================================================
     // HTML ELEMENTEN
-    // =========================
+    // =========================================================
 
-    const pizza =
-        document.getElementById("pizza");
+    const pizza = document.getElementById("pizza");
 
     const pepperoniElement =
         document.getElementById("pepperoni");
@@ -120,136 +123,154 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("resetButton");
 
 
-    // =========================
+    // =========================================================
     // CRITICAL CLICK
-    // =========================
+    // =========================================================
 
     const CRITICAL_CHANCE = 0.05;
     const CRITICAL_MULTIPLIER = 2;
 
 
-    // =========================
+    // =========================================================
     // COMBO
-    // =========================
+    // =========================================================
 
-let combo = 0;
-let comboTimer = null;
-let lastComboMultiplier = 1;
+    let combo = 0;
+    let comboTimer = null;
+    let lastComboMultiplier = 1;
 
-const MAX_COMBO = 100;
-const COMBO_TIMEOUT = 3000;
+    const MAX_COMBO = 100;
+    const COMBO_TIMEOUT = 3000;
 
 
-  function increaseCombo() {
+    function increaseCombo() {
 
-    if (combo < MAX_COMBO) {
-        combo++;
-    }
+        if (combo < MAX_COMBO) {
+            combo++;
+        }
 
-    const newMultiplier = getComboMultiplier();
-
-    updateComboDisplay();
-    updateComboBonusDisplay();
-
-    checkAchievements();
-
-    // Alleen effect wanneer je een nieuwe combo-mijlpaal bereikt
-    if (newMultiplier !== lastComboMultiplier) {
-
-        showComboMilestone(newMultiplier);
-
-        lastComboMultiplier = newMultiplier;
-    }
-
-    if (comboTimer !== null) {
-        clearTimeout(comboTimer);
-    }
-
-    comboTimer = setTimeout(function () {
-
-        combo = 0;
-
-        lastComboMultiplier = 1;
+        const newMultiplier =
+            getComboMultiplier();
 
         updateComboDisplay();
         updateComboBonusDisplay();
 
-        comboTimer = null;
+        checkAchievements();
 
-    }, COMBO_TIMEOUT);
-}
+        if (newMultiplier !== lastComboMultiplier) {
+
+            showComboMilestone(newMultiplier);
+
+            lastComboMultiplier =
+                newMultiplier;
+        }
+
+        if (comboTimer !== null) {
+            clearTimeout(comboTimer);
+        }
+
+        comboTimer = setTimeout(function () {
+
+            combo = 0;
+
+            lastComboMultiplier = 1;
+
+            updateComboDisplay();
+            updateComboBonusDisplay();
+
+            comboTimer = null;
+
+        }, COMBO_TIMEOUT);
+    }
+
+
+    // =========================================================
+    // COMBO DISPLAY
+    // =========================================================
+
+    function updateComboDisplay() {
+
+        if (!comboElement) {
+            return;
+        }
+
+        comboElement.textContent =
+            formatNumber(combo);
+    }
+
+
+    // =========================================================
+    // COMBO MILESTONES
+    // =========================================================
+
     function showComboMilestone(multiplier) {
 
-    let text = "";
-    let className = "";
+        let text = "";
+        let className = "";
 
-    if (multiplier >= 2) {
+        if (multiplier >= 2) {
 
-        text = "👑 MAX COMBO! ×2,00";
+            text = "👑 MAX COMBO! ×2,00";
+            className = "combo-max";
 
-        className = "combo-max";
+        } else if (multiplier >= 1.75) {
 
-    } else if (multiplier >= 1.75) {
+            text = "🔥 INSANE COMBO! ×1,75";
+            className = "combo-insane";
 
-        text = "🔥 INSANE COMBO! ×1,75";
+        } else if (multiplier >= 1.50) {
 
-        className = "combo-insane";
+            text = "🔥 GREAT COMBO! ×1,50";
+            className = "combo-great";
 
-    } else if (multiplier >= 1.50) {
+        } else if (multiplier >= 1.25) {
 
-        text = "🔥 GREAT COMBO! ×1,50";
+            text = "🔥 COMBO! ×1,25";
+            className = "combo-good";
 
-        className = "combo-great";
+        } else if (multiplier >= 1.10) {
 
-    } else if (multiplier >= 1.25) {
+            text = "🔥 COMBO START! ×1,10";
+            className = "combo-start";
+        }
 
-        text = "🔥 COMBO! ×1,25";
+        if (!text) {
+            return;
+        }
 
-        className = "combo-good";
+        const popup =
+            document.createElement("div");
 
-    } else if (multiplier >= 1.10) {
+        popup.className =
+            "combo-milestone " + className;
 
-        text = "🔥 COMBO START! ×1,10";
+        popup.textContent = text;
 
-        className = "combo-start";
+        document.body.appendChild(popup);
 
+        setTimeout(function () {
+
+            popup.classList.add("show");
+
+        }, 10);
+
+        setTimeout(function () {
+
+            popup.classList.remove("show");
+
+        }, 850);
+
+        setTimeout(function () {
+
+            popup.remove();
+
+        }, 1100);
     }
 
-    if (!text) {
-        return;
-    }
 
-    const popup = document.createElement("div");
-
-    popup.className =
-        "combo-milestone " + className;
-
-    popup.textContent = text;
-
-    document.body.appendChild(popup);
-
-    setTimeout(function () {
-
-        popup.classList.add("show");
-
-    }, 10);
-
-    setTimeout(function () {
-
-        popup.classList.remove("show");
-
-    }, 850);
-
-    setTimeout(function () {
-
-        popup.remove();
-
-    }, 1100);
-}
-
-    // =========================
+    // =========================================================
     // COMBO BONUS
-    // =========================
+    // =========================================================
 
     function getComboMultiplier() {
 
@@ -283,10 +304,8 @@ const COMBO_TIMEOUT = 3000;
             return;
         }
 
-
         const multiplier =
             getComboMultiplier();
-
 
         comboBonusElement.textContent =
             "×" +
@@ -296,9 +315,9 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // GETALLEN
-    // =========================
+    // =========================================================
 
     function formatNumber(number) {
 
@@ -307,91 +326,75 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // PER CLICK
-    // =========================
+    // =========================================================
 
     function getPerClick() {
 
         let amount = 1;
 
-
         amount +=
             game.upgrades.pepperoniPower * 1;
-
 
         amount +=
             game.upgrades.bigPizza * 2;
 
-
         amount +=
             game.upgrades.fastSpin * 5;
-
 
         return amount;
     }
 
 
-    // =========================
+    // =========================================================
     // PER SECOND
-    // =========================
+    // =========================================================
 
     function getPerSecond() {
 
         let amount = 0;
 
-
         amount +=
             game.upgrades.autoPizza * 1;
-
 
         amount +=
             game.upgrades.pizzaRobot * 5;
 
-
         amount +=
             game.upgrades.megaRobot * 50;
-
 
         amount +=
             game.upgrades.pizzaChef * 20;
 
-
         amount +=
             game.upgrades.pizzaFactory * 100;
-
 
         amount +=
             game.upgrades.pizzaReactor * 250;
 
-
         amount +=
             game.upgrades.pizzaShop * 500;
-
 
         amount +=
             game.upgrades.pizzaEmpire * 2500;
 
-
         amount +=
             game.upgrades.pizzaRocket * 10000;
-
 
         amount +=
             game.upgrades.spacePizza * 50000;
 
-
         amount +=
             game.upgrades.pizzaGod * 250000;
-
 
         return amount;
     }
 
 
-    // =========================
+    // =========================================================
     // UPGRADES
-    // =========================
+    // =========================================================
 
     const upgrades = [
 
@@ -492,7 +495,6 @@ const COMBO_TIMEOUT = 3000;
             description: "+250.000 🍕 per seconde",
             baseCost: 25000000
         }
-
     ];
 
 
@@ -500,7 +502,6 @@ const COMBO_TIMEOUT = 3000;
 
         const level =
             game.upgrades[upgrade.id];
-
 
         return Math.floor(
             upgrade.baseCost *
@@ -514,16 +515,13 @@ const COMBO_TIMEOUT = 3000;
         const cost =
             getUpgradeCost(upgrade);
 
-
         if (game.pepperoni < cost) {
             return;
         }
 
-
         game.pepperoni -= cost;
 
         game.upgrades[upgrade.id]++;
-
 
         saveGame();
 
@@ -539,27 +537,21 @@ const COMBO_TIMEOUT = 3000;
             return;
         }
 
-
         upgradeList.innerHTML = "";
-
 
         upgrades.forEach(function (upgrade) {
 
             const level =
                 game.upgrades[upgrade.id];
 
-
             const cost =
                 getUpgradeCost(upgrade);
-
 
             const card =
                 document.createElement("div");
 
-
             card.className =
                 "upgrade-card";
-
 
             card.innerHTML = `
                 <h3>${upgrade.name}</h3>
@@ -573,15 +565,12 @@ const COMBO_TIMEOUT = 3000;
                 </button>
             `;
 
-
             const button =
                 card.querySelector("button");
-
 
             if (game.pepperoni < cost) {
                 button.disabled = true;
             }
-
 
             button.addEventListener(
                 "click",
@@ -592,16 +581,15 @@ const COMBO_TIMEOUT = 3000;
                 }
             );
 
-
             upgradeList.appendChild(card);
 
         });
     }
 
 
-    // =========================
+    // =========================================================
     // XP EN LEVEL
-    // =========================
+    // =========================================================
 
     function getXPNeeded() {
 
@@ -613,13 +601,11 @@ const COMBO_TIMEOUT = 3000;
 
         game.xp += amount;
 
-
         while (game.xp >= getXPNeeded()) {
 
             game.xp -= getXPNeeded();
 
             game.level++;
-
 
             showAchievementPopup(
                 "⭐ LEVEL UP! Je bent nu level " +
@@ -627,7 +613,6 @@ const COMBO_TIMEOUT = 3000;
                 "!"
             );
         }
-
 
         checkAchievements();
     }
@@ -638,24 +623,23 @@ const COMBO_TIMEOUT = 3000;
         const needed =
             getXPNeeded();
 
-
         if (levelElement) {
+
             levelElement.textContent =
                 game.level;
         }
 
-
         if (xpElement) {
+
             xpElement.textContent =
                 formatNumber(game.xp);
         }
 
-
         if (xpNeededElement) {
+
             xpNeededElement.textContent =
                 formatNumber(needed);
         }
-
 
         if (xpProgress) {
 
@@ -665,16 +649,15 @@ const COMBO_TIMEOUT = 3000;
                     100
                 );
 
-
             xpProgress.style.width =
                 percentage + "%";
         }
     }
 
 
-    // =========================
-    // ACHIEVEMENTS V2
-    // =========================
+    // =========================================================
+    // ACHIEVEMENTS
+    // =========================================================
 
     const achievements = [
 
@@ -797,13 +780,12 @@ const COMBO_TIMEOUT = 3000;
             name: "🌟 Level Master",
             description: "Bereik level 25"
         }
-
     ];
 
 
-    // =========================
-    // POPUP
-    // =========================
+    // =========================================================
+    // ACHIEVEMENT POPUP
+    // =========================================================
 
     function showAchievementPopup(text) {
 
@@ -814,15 +796,12 @@ const COMBO_TIMEOUT = 3000;
             return;
         }
 
-
         popupText.textContent =
             text;
-
 
         achievementPopup.classList.add(
             "show"
         );
-
 
         setTimeout(function () {
 
@@ -834,9 +813,9 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // ACHIEVEMENTS CHECKEN
-    // =========================
+    // =========================================================
 
     function checkAchievements() {
 
@@ -876,7 +855,7 @@ const COMBO_TIMEOUT = 3000;
                 getPerSecond() >= 1000,
 
             criticalClick:
-                false,
+                game.achievements.criticalClick,
 
             combo10:
                 combo >= 10,
@@ -918,20 +897,21 @@ const COMBO_TIMEOUT = 3000;
                         achievement.id
                     ] = true;
 
-
                     showAchievementPopup(
                         "🏆 " +
                         achievement.name
                     );
 
-
                     saveGame();
                 }
-
             }
         );
     }
 
+
+    // =========================================================
+    // ACHIEVEMENTS RENDEREN
+    // =========================================================
 
     function renderAchievements() {
 
@@ -939,9 +919,7 @@ const COMBO_TIMEOUT = 3000;
             return;
         }
 
-
         achievementList.innerHTML = "";
-
 
         achievements.forEach(
             function (achievement) {
@@ -949,10 +927,8 @@ const COMBO_TIMEOUT = 3000;
                 const item =
                     document.createElement("div");
 
-
                 item.className =
                     "achievement-item";
-
 
                 if (
                     game.achievements[
@@ -963,7 +939,6 @@ const COMBO_TIMEOUT = 3000;
                     item.classList.add(
                         "unlocked"
                     );
-
 
                     item.innerHTML = `
                         🏆 <strong>
@@ -996,19 +971,17 @@ const COMBO_TIMEOUT = 3000;
                     `;
                 }
 
-
                 achievementList.appendChild(
                     item
                 );
-
             }
         );
     }
 
 
-    // =========================
+    // =========================================================
     // CLICK PARTICLES
-    // =========================
+    // =========================================================
 
     function createClickParticles(
         isCritical = false
@@ -1018,48 +991,38 @@ const COMBO_TIMEOUT = 3000;
             return;
         }
 
-
         const rect =
             pizza.getBoundingClientRect();
-
 
         const centerX =
             rect.left +
             rect.width / 2;
 
-
         const centerY =
             rect.top +
             rect.height / 2;
 
-
         let particleAmount = 4;
-
 
         if (combo >= 25) {
             particleAmount = 6;
         }
 
-
         if (combo >= 50) {
             particleAmount = 8;
         }
-
 
         if (combo >= 75) {
             particleAmount = 10;
         }
 
-
         if (combo >= 100) {
             particleAmount = 14;
         }
 
-
         if (isCritical) {
             particleAmount = 20;
         }
-
 
         for (
             let i = 0;
@@ -1070,46 +1033,37 @@ const COMBO_TIMEOUT = 3000;
             const particle =
                 document.createElement("div");
 
-
             particle.className =
                 "click-particle";
-
 
             particle.style.left =
                 centerX + "px";
 
-
             particle.style.top =
                 centerY + "px";
-
 
             const spread =
                 isCritical
                     ? 350
                     : 250;
 
-
             const x =
                 (Math.random() - 0.5) *
                 spread;
 
-
             const y =
                 (Math.random() - 0.5) *
                 spread;
-
 
             particle.style.setProperty(
                 "--particle-x",
                 x + "px"
             );
 
-
             particle.style.setProperty(
                 "--particle-y",
                 y + "px"
             );
-
 
             if (isCritical) {
 
@@ -1126,11 +1080,9 @@ const COMBO_TIMEOUT = 3000;
                     "3px solid #ff3d00";
             }
 
-
             document.body.appendChild(
                 particle
             );
-
 
             setTimeout(
                 function () {
@@ -1144,9 +1096,9 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // CRITICAL POPUP
-    // =========================
+    // =========================================================
 
     function showCriticalClick(amount) {
 
@@ -1155,7 +1107,6 @@ const COMBO_TIMEOUT = 3000;
             formatNumber(amount) +
             " 🍕"
         );
-
 
         if (
             !game.achievements.criticalClick
@@ -1168,12 +1119,79 @@ const COMBO_TIMEOUT = 3000;
 
             renderAchievements();
         }
+
+
+        // Extra grote Critical popup
+        const criticalPopup =
+            document.createElement("div");
+
+        criticalPopup.className =
+            "critical-popup";
+
+        criticalPopup.innerHTML = `
+            <div class="critical-title">
+                💥 CRITICAL!
+            </div>
+
+            <div class="critical-amount">
+                +${formatNumber(amount)} 🍕
+            </div>
+        `;
+
+        document.body.appendChild(
+            criticalPopup
+        );
+
+        setTimeout(function () {
+
+            criticalPopup.classList.add(
+                "show"
+            );
+
+        }, 10);
+
+        setTimeout(function () {
+
+            criticalPopup.classList.remove(
+                "show"
+            );
+
+        }, 850);
+
+        setTimeout(function () {
+
+            criticalPopup.remove();
+
+        }, 1200);
+
+
+        // Pizza shake
+        if (pizza) {
+
+            pizza.classList.remove(
+                "critical-hit"
+            );
+
+            void pizza.offsetWidth;
+
+            pizza.classList.add(
+                "critical-hit"
+            );
+
+            setTimeout(function () {
+
+                pizza.classList.remove(
+                    "critical-hit"
+                );
+
+            }, 450);
+        }
     }
 
 
-    // =========================
+    // =========================================================
     // OPSLAAN
-    // =========================
+    // =========================================================
 
     function saveGame() {
 
@@ -1184,9 +1202,9 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // LADEN
-    // =========================
+    // =========================================================
 
     function loadGame() {
 
@@ -1195,23 +1213,19 @@ const COMBO_TIMEOUT = 3000;
                 SAVE_KEY
             );
 
-
         if (!savedGame) {
             return;
         }
-
 
         try {
 
             const loaded =
                 JSON.parse(savedGame);
 
-
             game = Object.assign(
                 createNewGame(),
                 loaded
             );
-
 
             game.upgrades =
                 Object.assign(
@@ -1219,26 +1233,25 @@ const COMBO_TIMEOUT = 3000;
                     loaded.upgrades || {}
                 );
 
-
             game.achievements =
                 Object.assign(
                     createNewGame().achievements,
                     loaded.achievements || {}
                 );
 
-
         } catch (error) {
 
             console.log(
-                "Save kon niet worden geladen."
+                "Save kon niet worden geladen.",
+                error
             );
         }
     }
 
 
-    // =========================
+    // =========================================================
     // GAME UPDATEN
-    // =========================
+    // =========================================================
 
     function updateGame() {
 
@@ -1250,7 +1263,6 @@ const COMBO_TIMEOUT = 3000;
                 );
         }
 
-
         if (spinsElement) {
 
             spinsElement.textContent =
@@ -1258,7 +1270,6 @@ const COMBO_TIMEOUT = 3000;
                     game.spins
                 );
         }
-
 
         if (perSpinElement) {
 
@@ -1268,7 +1279,6 @@ const COMBO_TIMEOUT = 3000;
                 );
         }
 
-
         if (perSecondElement) {
 
             perSecondElement.textContent =
@@ -1276,7 +1286,6 @@ const COMBO_TIMEOUT = 3000;
                     getPerSecond()
                 );
         }
-
 
         updateComboDisplay();
 
@@ -1292,9 +1301,9 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // PIZZA KLIKKEN
-    // =========================
+    // =========================================================
 
     if (pizza) {
 
@@ -1376,15 +1385,14 @@ const COMBO_TIMEOUT = 3000;
                     "pizza-click"
                 );
 
-
                 void pizza.offsetWidth;
-
 
                 pizza.classList.add(
                     "pizza-click"
                 );
 
 
+                // Game updaten
                 updateGame();
 
             }
@@ -1392,9 +1400,9 @@ const COMBO_TIMEOUT = 3000;
     }
 
 
-    // =========================
+    // =========================================================
     // AUTO PRODUCTIE
-    // =========================
+    // =========================================================
 
     setInterval(
         function () {
@@ -1402,15 +1410,12 @@ const COMBO_TIMEOUT = 3000;
             const perSecond =
                 getPerSecond();
 
-
             if (perSecond <= 0) {
                 return;
             }
 
-
             game.pepperoni +=
                 perSecond;
-
 
             checkAchievements();
 
@@ -1421,9 +1426,9 @@ const COMBO_TIMEOUT = 3000;
     );
 
 
-    // =========================
+    // =========================================================
     // AUTOSAVE
-    // =========================
+    // =========================================================
 
     setInterval(
         function () {
@@ -1435,9 +1440,9 @@ const COMBO_TIMEOUT = 3000;
     );
 
 
-    // =========================
+    // =========================================================
     // RESET
-    // =========================
+    // =========================================================
 
     if (resetButton) {
 
@@ -1450,18 +1455,16 @@ const COMBO_TIMEOUT = 3000;
                         "Weet je zeker dat je helemaal opnieuw wilt beginnen?"
                     );
 
-
                 if (!confirmed) {
                     return;
                 }
 
-
                 game =
                     createNewGame();
 
-
                 combo = 0;
 
+                lastComboMultiplier = 1;
 
                 if (comboTimer !== null) {
 
@@ -1472,19 +1475,17 @@ const COMBO_TIMEOUT = 3000;
                     comboTimer = null;
                 }
 
-
                 saveGame();
 
                 updateGame();
-
             }
         );
     }
 
 
-    // =========================
+    // =========================================================
     // PAGINA VERLATEN
-    // =========================
+    // =========================================================
 
     window.addEventListener(
         "beforeunload",
@@ -1496,9 +1497,9 @@ const COMBO_TIMEOUT = 3000;
     );
 
 
-    // =========================
+    // =========================================================
     // START
-    // =========================
+    // =========================================================
 
     loadGame();
 
