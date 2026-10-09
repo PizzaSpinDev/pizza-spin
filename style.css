@@ -1383,3 +1383,150 @@ body {
             30px;
     }
 }
+
+/* =========================================================
+   SHOP V2 - DUIDELIJKE UPGRADE KAARTEN
+========================================================= */
+
+.upgrade-card {
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
+    border-color: #3f3f3f;
+    background: linear-gradient(135deg, #292929, #202020);
+}
+
+.upgrade-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #555;
+}
+
+.upgrade-card.upgrade-affordable::before {
+    background: #ff9d3c;
+}
+
+.upgrade-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.upgrade-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #5a4930;
+    border-radius: 12px;
+    background: #352b1d;
+    font-size: 25px;
+}
+
+.upgrade-heading {
+    min-width: 0;
+    flex: 1;
+}
+
+.upgrade-card .upgrade-heading h3 {
+    margin: 0 0 5px;
+    line-height: 1.2;
+}
+
+.upgrade-level {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 5px;
+    background: #3a3a3a;
+    color: #ffd45c;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.7px;
+}
+
+.upgrade-card .upgrade-description {
+    margin: 8px 0 12px;
+    color: #f2f2f2;
+    font-size: 14px;
+}
+
+.upgrade-details {
+    display: grid;
+    gap: 7px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.22);
+}
+
+.upgrade-detail-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.upgrade-detail-row span {
+    color: #aaa;
+}
+
+.upgrade-detail-row strong {
+    color: #ffd45c;
+    text-align: right;
+}
+
+.upgrade-status {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.upgrade-status.can-buy {
+    color: #8ee6a0;
+}
+
+.upgrade-status.need-more {
+    color: #b7b7b7;
+}
+
+.upgrade-card button.upgrade-button {
+    margin-top: 10px;
+    min-height: 42px;
+    line-height: 1.35;
+    white-space: normal;
+}
+
+.upgrade-card button.upgrade-button:disabled {
+    background: #383838;
+    color: #999;
+    border: 1px solid #4a4a4a;
+    opacity: 1;
+}
+
+@media (max-width: 600px) {
+    .upgrade-card {
+        padding: 13px;
+    }
+
+    .upgrade-icon {
+        flex-basis: 42px;
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+    }
+
+    .upgrade-card .upgrade-heading h3 {
+        font-size: 16px;
+    }
+
+    .upgrade-detail-row {
+        font-size: 11px;
+    }
+}
